@@ -111,10 +111,178 @@
         color: #f4f4f5 !important;
         border: 2px solid #3f3f46 !important;
         box-shadow: none !important;
+        transform: none !important;
       }
       .no-print {
         display: none !important;
       }
+    }
+
+    /* Ambient Spotlight tracking mouse */
+    .ambient-spotlight {
+      background: radial-gradient(
+        750px circle at var(--mouse-x, 50vw) var(--mouse-y, 35vh),
+        rgba(239, 68, 68, 0.08),
+        rgba(139, 92, 246, 0.05),
+        transparent 70%
+      );
+    }
+
+    /* Cyberpunk Horizon Grid */
+    .cyber-grid-floor {
+      background-image: 
+        linear-gradient(to right, rgba(239, 68, 68, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(139, 92, 246, 0.08) 1px, transparent 1px);
+      background-size: 50px 50px;
+      transform: perspective(500px) rotateX(65deg);
+      transform-origin: center bottom;
+      mask-image: linear-gradient(to top, rgba(0,0,0,0.85) 15%, transparent 90%);
+      -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.85) 15%, transparent 90%);
+    }
+
+    /* Laser Scanbeam */
+    @keyframes scanline-travel {
+      0% { transform: translateY(-50px); opacity: 0; }
+      15% { opacity: 0.7; }
+      85% { opacity: 0.7; }
+      100% { transform: translateY(105vh); opacity: 0; }
+    }
+    .laser-scanbeam {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.6), rgba(139, 92, 246, 0.8), rgba(245, 158, 11, 0.6), transparent);
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.8), 0 0 30px rgba(139, 92, 246, 0.5);
+      animation: scanline-travel 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Screen Shake on Impact */
+    @keyframes screen-glitch-shake {
+      0% { transform: translate(0, 0); }
+      15% { transform: translate(-3px, 2px); }
+      35% { transform: translate(3px, -2px); }
+      55% { transform: translate(-2px, -1px); }
+      75% { transform: translate(2px, 1px); }
+      100% { transform: translate(0, 0); }
+    }
+    .screen-shake {
+      animation: screen-glitch-shake 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    /* Card Impact Entrance */
+    @keyframes roast-impact {
+      0% { opacity: 0; transform: translateY(28px) scale(0.96); filter: blur(6px); }
+      60% { transform: translateY(-3px) scale(1.008); filter: blur(0); }
+      85% { transform: translateY(1px) scale(0.998); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+    .animate-roast-impact {
+      animation: roast-impact 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Staggered items */
+    .stagger-item {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .stagger-item.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 3D Interactive Tilt Card */
+    .tilt-card-container {
+      perspective: 1200px;
+    }
+    #printable-roast-card {
+      transform-style: preserve-3d;
+      transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+      will-change: transform;
+    }
+    .card-specular-glare {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: radial-gradient(
+        circle at var(--card-mouse-x, 50%) var(--card-mouse-y, 50%),
+        rgba(255, 255, 255, 0.09) 0%,
+        rgba(239, 68, 68, 0.04) 30%,
+        transparent 65%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 5;
+    }
+    #printable-roast-card:hover .card-specular-glare {
+      opacity: 1;
+    }
+
+    /* Fire button aura */
+    @keyframes fire-shimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .fire-button {
+      background: linear-gradient(135deg, #ef4444, #f97316, #dc2626, #b91c1c);
+      background-size: 250% 250%;
+      animation: fire-shimmer 4s ease infinite;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fire-button:hover {
+      box-shadow: 0 0 35px rgba(239, 68, 68, 0.7), 0 0 15px rgba(245, 158, 11, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    /* Terminal progress bar animated sheen */
+    @keyframes progress-sheen {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    .terminal-progress-animated {
+      background-size: 200% 100%;
+      animation: progress-sheen 1.8s linear infinite;
+    }
+
+    /* Dishonor badge hover */
+    .dishonor-badge-card {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .dishonor-badge-card:hover {
+      transform: translateY(-2px) scale(1.02);
+      border-color: rgba(239, 68, 68, 0.5);
+      box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.2);
+    }
+
+    /* Cyberpunk HUD Corner Markers */
+    .hud-corner-tl::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      width: 10px;
+      height: 10px;
+      border-top: 2px solid #ef4444;
+      border-left: 2px solid #ef4444;
+      pointer-events: none;
+    }
+    .hud-corner-br::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 2px solid #8b5cf6;
+      border-right: 2px solid #8b5cf6;
+      pointer-events: none;
     }
 
     /* Scanline effect */
@@ -150,11 +318,27 @@
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans selection:bg-red-500/30 selection:text-red-200 antialiased relative overflow-x-hidden">
 
-  <!-- Background Grid Effect -->
-  <div class="fixed inset-0 pointer-events-none z-0">
-    <div class="absolute inset-0 bg-[linear-gradient(to_right,#27272a15_1px,transparent_1px),linear-gradient(to_bottom,#27272a15_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-purple-600/10 blur-[130px] rounded-full"></div>
-    <div class="absolute top-96 right-10 w-[450px] h-[300px] bg-red-600/10 blur-[140px] rounded-full"></div>
+  <!-- Dynamic Living Background System -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <!-- Interactive Cyberpunk Particles & Floating Embers Canvas -->
+    <canvas id="ambient-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+    
+    <!-- Cursor Spotlight Tracker -->
+    <div id="ambient-spotlight" class="absolute inset-0 ambient-spotlight pointer-events-none transition-opacity duration-300"></div>
+
+    <!-- Matrix Code Grid Pattern -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#27272a14_1px,transparent_1px),linear-gradient(to_bottom,#27272a14_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+    
+    <!-- Futuristic Horizon Cyber Grid Floor -->
+    <div class="absolute bottom-0 left-0 right-0 h-96 cyber-grid-floor pointer-events-none"></div>
+
+    <!-- Glowing Ambient Nebula Orbs -->
+    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-purple-600/15 via-red-600/10 to-transparent blur-[140px] rounded-full pointer-events-none"></div>
+    <div class="absolute top-1/3 -right-20 w-[500px] h-[350px] bg-red-600/10 blur-[150px] rounded-full pointer-events-none animate-pulse" style="animation-duration: 8s;"></div>
+    <div class="absolute top-2/3 -left-20 w-[450px] h-[350px] bg-purple-600/10 blur-[150px] rounded-full pointer-events-none"></div>
+
+    <!-- Traveling Laser Scanbeam -->
+    <div class="laser-scanbeam"></div>
   </div>
 
   <!-- Sound & Quick Controls Bar -->
@@ -239,7 +423,7 @@
               <button 
                 type="submit" 
                 id="roast-btn"
-                class="px-5 py-3 rounded-lg bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white font-mono font-bold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 active:scale-95 transition-all whitespace-nowrap cursor-pointer"
+                class="fire-button px-6 py-3 rounded-lg text-white font-mono font-bold text-sm tracking-wide flex items-center justify-center gap-2 active:scale-95 transition-all whitespace-nowrap cursor-pointer"
               >
                 <span>🔥 Roast Me</span>
               </button>
@@ -250,26 +434,26 @@
         <!-- Quick Select Pills -->
         <div class="flex items-center justify-center flex-wrap gap-2 mt-4 text-xs font-mono">
           <span class="text-zinc-500">Quick Victims:</span>
-          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-400 text-zinc-400 transition-colors" data-user="torvalds">@torvalds</button>
-          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-400 text-zinc-400 transition-colors" data-user="shadcn">@shadcn</button>
-          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-400 text-zinc-400 transition-colors" data-user="gaearon">@gaearon</button>
-          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-400 text-zinc-400 transition-colors" data-user="karpathy">@karpathy</button>
+          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-300 hover:shadow-lg hover:shadow-purple-500/10 text-zinc-400 transition-all cursor-pointer" data-user="torvalds">@torvalds</button>
+          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-300 hover:shadow-lg hover:shadow-purple-500/10 text-zinc-400 transition-all cursor-pointer" data-user="shadcn">@shadcn</button>
+          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-300 hover:shadow-lg hover:shadow-purple-500/10 text-zinc-400 transition-all cursor-pointer" data-user="gaearon">@gaearon</button>
+          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-300 hover:shadow-lg hover:shadow-purple-500/10 text-zinc-400 transition-all cursor-pointer" data-user="karpathy">@karpathy</button>
         </div>
       </div>
     </section>
 
     <!-- Hacker Terminal Loading Section (Hidden by default) -->
     <section id="terminal-section" class="hidden">
-      <div class="bg-zinc-900/95 border-2 border-red-500/40 rounded-xl overflow-hidden shadow-2xl backdrop-blur-md scanlines">
+      <div class="bg-zinc-900/95 border-2 border-red-500/40 rounded-xl overflow-hidden shadow-2xl backdrop-blur-md scanlines relative hud-corner-tl hud-corner-br">
         <!-- Terminal Header -->
         <div class="px-4 py-2.5 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between font-mono text-xs">
           <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block shadow-sm shadow-red-500/50"></span>
             <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
             <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
             <span class="ml-2 text-zinc-400 font-semibold" id="terminal-title">gitroast-auditor // analysis_in_progress</span>
           </div>
-          <button id="skip-terminal-btn" class="text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1 text-[11px]">
+          <button id="skip-terminal-btn" class="text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1 text-[11px] cursor-pointer">
             <span>Fast Forward</span>
             <i data-lucide="fast-forward" class="w-3 h-3"></i>
           </button>
@@ -286,9 +470,9 @@
             <span class="inline-block w-2 h-4 bg-red-400 animate-pulse"></span>
           </div>
 
-          <!-- Progress Bar -->
-          <div class="w-full bg-zinc-950 h-2 rounded-full overflow-hidden mt-4 border border-zinc-800">
-            <div id="terminal-progress-bar" class="h-full bg-gradient-to-r from-red-600 via-purple-600 to-green-500 transition-all duration-300" style="width: 10%"></div>
+          <!-- Progress Bar with Animated Cyber Sheen -->
+          <div class="w-full bg-zinc-950 h-2.5 rounded-full overflow-hidden mt-4 border border-zinc-800/80">
+            <div id="terminal-progress-bar" class="h-full bg-gradient-to-r from-red-600 via-purple-600 via-amber-500 to-green-500 terminal-progress-animated transition-all duration-300" style="width: 10%"></div>
           </div>
         </div>
       </div>
@@ -300,18 +484,18 @@
       <!-- Action Bar -->
       <div class="flex flex-wrap items-center justify-between gap-3 no-print">
         <div class="flex items-center gap-2">
-          <span class="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300">
-            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+          <span class="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
             Audit Completed
           </span>
-          <span id="roast-damage-badge" class="inline-flex items-center gap-1 text-xs font-mono px-3 py-1 rounded-md bg-red-950/60 border border-red-800/80 text-red-300 font-bold">
-            🔥 Ego Annihilated: 98%
+          <span id="roast-damage-badge" class="inline-flex items-center gap-1 text-xs font-mono px-3 py-1 rounded-md bg-red-950/60 border border-red-800/80 text-red-300 font-bold shadow-lg shadow-red-950/50 transition-all">
+            🔥 Ego Annihilated: <span id="ego-score-value">0</span>%
           </span>
         </div>
 
         <div class="flex items-center gap-2">
           <!-- Copy Roast -->
-          <button id="copy-roast-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-mono text-zinc-200 transition-colors">
+          <button id="copy-roast-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-mono text-zinc-200 transition-colors cursor-pointer">
             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
             <span id="copy-btn-text">Copy Roast</span>
           </button>
@@ -322,132 +506,144 @@
             <span>Share to X</span>
           </a>
 
+          <!-- Download Image (PNG) -->
+          <button id="download-png-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-red-600/30 to-purple-600/30 hover:from-red-600/40 hover:to-purple-600/40 border border-red-500/50 text-xs font-mono text-zinc-100 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm shadow-red-900/30" title="Export clean PNG directly via HTML5 Canvas">
+            <i data-lucide="download" class="w-3.5 h-3.5 text-red-400"></i>
+            <span id="download-png-text">Download Image (PNG)</span>
+          </button>
+
           <!-- Print / Save Card -->
-          <button id="print-card-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 text-xs font-mono text-red-300 transition-colors">
+          <button id="print-card-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-mono text-zinc-300 transition-colors cursor-pointer">
             <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-            <span>Print / Save PDF</span>
+            <span>Print / PDF</span>
           </button>
         </div>
       </div>
 
-      <!-- Printable Card Container -->
-      <div id="printable-roast-card" class="relative bg-zinc-900/90 backdrop-blur-md rounded-2xl border-2 border-red-500/40 p-6 sm:p-8 space-y-6 shadow-2xl overflow-hidden">
-        
-        <!-- Glowing Ambient Accents -->
-        <div class="absolute -top-24 -right-24 w-60 h-60 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-24 -left-24 w-60 h-60 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <!-- 3D Tilt Wrapper Container -->
+      <div class="tilt-card-container">
+        <!-- Printable Card Container -->
+        <div id="printable-roast-card" class="relative bg-zinc-900/90 backdrop-blur-md rounded-2xl border-2 border-red-500/40 p-6 sm:p-8 space-y-6 shadow-2xl overflow-hidden hud-corner-tl hud-corner-br">
+          
+          <!-- Interactive Specular Glare -->
+          <div id="card-specular-glare" class="card-specular-glare"></div>
 
-        <!-- Card Header: Profile Info & Dev Archetype -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
-          <div class="flex items-center gap-4">
-            <div class="relative">
-              <img id="card-avatar" src="" alt="Avatar" class="w-16 h-16 rounded-xl border-2 border-purple-500 object-cover bg-zinc-800" referrerpolicy="no-referrer">
-              <span id="card-mode-icon" class="absolute -bottom-1 -right-1 text-base bg-zinc-950 rounded-full p-0.5 border border-zinc-800">🔥</span>
+          <!-- Glowing Ambient Accents -->
+          <div class="absolute -top-24 -right-24 w-60 h-60 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-24 -left-24 w-60 h-60 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <!-- Card Header: Profile Info & Dev Archetype (Stagger 1) -->
+          <div id="card-header-row" class="stagger-item flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
+            <div class="flex items-center gap-4">
+              <div class="relative">
+                <img id="card-avatar" src="" alt="Avatar" class="w-16 h-16 rounded-xl border-2 border-purple-500 object-cover bg-zinc-800 transition-transform duration-300 hover:scale-105" referrerpolicy="no-referrer">
+                <span id="card-mode-icon" class="absolute -bottom-1 -right-1 text-base bg-zinc-950 rounded-full p-0.5 border border-zinc-800 shadow-md">🔥</span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h2 id="card-name" class="text-xl font-bold text-white tracking-tight">Linus Torvalds</h2>
+                  <a id="card-username-link" href="#" target="_blank" class="text-sm font-mono text-purple-400 hover:underline">@torvalds</a>
+                </div>
+                <p id="card-bio" class="text-xs text-zinc-400 mt-0.5 max-w-md line-clamp-2">Creator of Linux &amp; Git. Occasional kernel curmudgeon.</p>
+                <div class="flex items-center gap-3 mt-2 text-xs font-mono text-zinc-500">
+                  <span id="card-stat-repos">📦 14 repos</span>
+                  <span>·</span>
+                  <span id="card-stat-followers">👥 210k followers</span>
+                  <span>·</span>
+                  <span id="card-stat-age">⏳ 12 yrs on Git</span>
+                </div>
+              </div>
             </div>
-            <div>
-              <div class="flex items-center gap-2 flex-wrap">
-                <h2 id="card-name" class="text-xl font-bold text-white tracking-tight">Linus Torvalds</h2>
-                <a id="card-username-link" href="#" target="_blank" class="text-sm font-mono text-purple-400 hover:underline">@torvalds</a>
-              </div>
-              <p id="card-bio" class="text-xs text-zinc-400 mt-0.5 max-w-md line-clamp-2">Creator of Linux &amp; Git. Occasional kernel curmudgeon.</p>
-              <div class="flex items-center gap-3 mt-2 text-xs font-mono text-zinc-500">
-                <span id="card-stat-repos">📦 14 repos</span>
-                <span>·</span>
-                <span id="card-stat-followers">👥 210k followers</span>
-                <span>·</span>
-                <span id="card-stat-age">⏳ 12 yrs on Git</span>
-              </div>
+
+            <!-- Dev Archetype Pill -->
+            <div class="self-stretch sm:self-auto flex flex-col items-start sm:items-end justify-center bg-zinc-950/70 border border-zinc-800 px-4 py-3 rounded-xl shadow-inner">
+              <span class="text-[10px] uppercase font-mono tracking-widest text-zinc-500">Diagnosed Archetype</span>
+              <span id="card-archetype" class="text-sm sm:text-base font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-purple-400 to-amber-300">
+                Tutorial Hell Veteran
+              </span>
             </div>
           </div>
 
-          <!-- Dev Archetype Pill -->
-          <div class="self-stretch sm:self-auto flex flex-col items-start sm:items-end justify-center bg-zinc-950/70 border border-zinc-800 px-4 py-3 rounded-xl">
-            <span class="text-[10px] uppercase font-mono tracking-widest text-zinc-500">Diagnosed Archetype</span>
-            <span id="card-archetype" class="text-sm sm:text-base font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-purple-400 to-amber-300">
-              Tutorial Hell Veteran
+          <!-- Devastating Roast Headline (Stagger 2) -->
+          <div id="card-headline-row" class="stagger-item space-y-2">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-red-400 font-bold flex items-center gap-1.5">
+              <i data-lucide="skull" class="w-3.5 h-3.5"></i>
+              Executive Roast Summary
             </span>
+            <h3 id="card-roast-headline" class="text-xl sm:text-2xl font-black text-white leading-snug tracking-tight">
+              "12 Repositories, 0 Stars, and 4 Abandoned Portfolio Redesigns"
+            </h3>
           </div>
-        </div>
 
-        <!-- Devastating Roast Headline -->
-        <div class="space-y-2">
-          <span class="text-[11px] font-mono uppercase tracking-wider text-red-400 font-bold flex items-center gap-1.5">
-            <i data-lucide="skull" class="w-3.5 h-3.5"></i>
-            Executive Roast Summary
-          </span>
-          <h3 id="card-roast-headline" class="text-xl sm:text-2xl font-black text-white leading-snug tracking-tight">
-            "12 Repositories, 0 Stars, and 4 Abandoned Portfolio Redesigns"
-          </h3>
-        </div>
-
-        <!-- 3 Punchy Devastating Paragraphs -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Commit Discipline -->
-          <div class="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-4 space-y-2">
-            <div class="flex items-center gap-2 text-xs font-mono text-zinc-400 font-semibold border-b border-zinc-800/60 pb-2">
-              <i data-lucide="git-commit" class="w-4 h-4 text-purple-400"></i>
-              <span>Commit Discipline</span>
+          <!-- 3 Punchy Devastating Paragraphs (Stagger 3) -->
+          <div id="card-paragraphs-row" class="stagger-item grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Commit Discipline -->
+            <div class="dishonor-badge-card bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-4 space-y-2">
+              <div class="flex items-center gap-2 text-xs font-mono text-zinc-400 font-semibold border-b border-zinc-800/60 pb-2">
+                <i data-lucide="git-commit" class="w-4 h-4 text-purple-400"></i>
+                <span>Commit Discipline</span>
+              </div>
+              <p id="card-roast-commits" class="text-xs text-zinc-300 leading-relaxed font-sans">
+                Analyzing commits reveals a chaotic timeline of 3 AM typo fixes labeled "fixed stuff" and emergency force pushes straight to production main.
+              </p>
             </div>
-            <p id="card-roast-commits" class="text-xs text-zinc-300 leading-relaxed font-sans">
-              Analyzing commits reveals a chaotic timeline of 3 AM typo fixes labeled "fixed stuff" and emergency force pushes straight to production main.
+
+            <!-- Tech Stack Graveyard -->
+            <div class="dishonor-badge-card bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-4 space-y-2">
+              <div class="flex items-center gap-2 text-xs font-mono text-zinc-400 font-semibold border-b border-zinc-800/60 pb-2">
+                <i data-lucide="layers" class="w-4 h-4 text-red-400"></i>
+                <span>Tech Stack Graveyard</span>
+              </div>
+              <p id="card-roast-stack" class="text-xs text-zinc-300 leading-relaxed font-sans">
+                Collecting modern frameworks like Pokemon cards without finishing the initial tutorial project. 400 npm packages installed for a simple counter app.
+              </p>
+            </div>
+
+            <!-- Bio & Delivery -->
+            <div class="dishonor-badge-card bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-4 space-y-2">
+              <div class="flex items-center gap-2 text-xs font-mono text-zinc-400 font-semibold border-b border-zinc-800/60 pb-2">
+                <i data-lucide="user-x" class="w-4 h-4 text-amber-400"></i>
+                <span>Bio vs Reality</span>
+              </div>
+              <p id="card-roast-bio" class="text-xs text-zinc-300 leading-relaxed font-sans">
+                Claims "Full-stack AI Evangelist & Disruptor" in bio, but recent public activity is 3 CSS forks and an issue comment asking for homework answers.
+              </p>
+            </div>
+          </div>
+
+          <!-- 4 Comedic Dishonor Badges (Stagger 4) -->
+          <div id="card-badges-row" class="stagger-item space-y-3">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-500 font-bold block">
+              Accredited Dishonor Badges
+            </span>
+            <div id="card-badges-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+              <!-- Badges injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Backhanded Compliment Box (Stagger 5) -->
+          <div id="card-compliment-row" class="stagger-item p-4 rounded-xl bg-gradient-to-r from-purple-950/40 via-zinc-900 to-red-950/30 border border-purple-800/40 relative shadow-lg">
+            <div class="text-[11px] font-mono uppercase tracking-wider text-purple-400 font-bold mb-1 flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              Silver Lining / Backhanded Compliment
+            </div>
+            <p id="card-compliment" class="text-xs sm:text-sm text-zinc-200 italic font-mono">
+              "At least your .gitignore is properly formatted. Oh wait, you pushed your OpenAI API key directly to main 3 weeks ago."
             </p>
           </div>
 
-          <!-- Tech Stack Graveyard -->
-          <div class="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-4 space-y-2">
-            <div class="flex items-center gap-2 text-xs font-mono text-zinc-400 font-semibold border-b border-zinc-800/60 pb-2">
-              <i data-lucide="layers" class="w-4 h-4 text-red-400"></i>
-              <span>Tech Stack Graveyard</span>
+          <!-- Card Footer / Watermark -->
+          <div class="pt-4 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-zinc-500 gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-red-400 font-bold">GitRoast.dev</span>
+              <span>//</span>
+              <span>Ego Destruction Protocol v2.4</span>
             </div>
-            <p id="card-roast-stack" class="text-xs text-zinc-300 leading-relaxed font-sans">
-              Collecting modern frameworks like Pokemon cards without finishing the initial tutorial project. 400 npm packages installed for a simple counter app.
-            </p>
-          </div>
-
-          <!-- Bio & Delivery -->
-          <div class="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-4 space-y-2">
-            <div class="flex items-center gap-2 text-xs font-mono text-zinc-400 font-semibold border-b border-zinc-800/60 pb-2">
-              <i data-lucide="user-x" class="w-4 h-4 text-amber-400"></i>
-              <span>Bio vs Reality</span>
+            <div class="flex items-center gap-3">
+              <span id="card-timestamp">Timestamp: 2026-09-23</span>
+              <span class="text-zinc-600">·</span>
+              <span>Certified Spaghetti Code</span>
             </div>
-            <p id="card-roast-bio" class="text-xs text-zinc-300 leading-relaxed font-sans">
-              Claims "Full-stack AI Evangelist & Disruptor" in bio, but recent public activity is 3 CSS forks and an issue comment asking for homework answers.
-            </p>
-          </div>
-        </div>
-
-        <!-- 4 Comedic Dishonor Badges -->
-        <div class="space-y-3">
-          <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-500 font-bold block">
-            Accredited Dishonor Badges
-          </span>
-          <div id="card-badges-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-            <!-- Badges injected dynamically -->
-          </div>
-        </div>
-
-        <!-- Backhanded Compliment Box -->
-        <div class="p-4 rounded-xl bg-gradient-to-r from-purple-950/40 via-zinc-900 to-red-950/30 border border-purple-800/40 relative">
-          <div class="text-[11px] font-mono uppercase tracking-wider text-purple-400 font-bold mb-1 flex items-center gap-1.5">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-            Silver Lining / Backhanded Compliment
-          </div>
-          <p id="card-compliment" class="text-xs sm:text-sm text-zinc-200 italic font-mono">
-            "At least your .gitignore is properly formatted. Oh wait, you pushed your OpenAI API key directly to main 3 weeks ago."
-          </p>
-        </div>
-
-        <!-- Card Footer / Watermark -->
-        <div class="pt-4 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-zinc-500 gap-2">
-          <div class="flex items-center gap-2">
-            <span class="text-red-400 font-bold">GitRoast.dev</span>
-            <span>//</span>
-            <span>Ego Destruction Protocol v2.4</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span id="card-timestamp">Timestamp: 2026-09-23</span>
-            <span class="text-zinc-600">·</span>
-            <span>Certified Spaghetti Code</span>
           </div>
         </div>
       </div>
@@ -626,6 +822,38 @@
         gain.connect(this.ctx.destination);
         osc.start();
         osc.stop(now + 0.45);
+      }
+      playTick() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(900 + Math.random() * 300, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.02);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.02);
+      }
+      playImpactBoom() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(25, now + 0.55);
+        gain.gain.setValueAtTime(0.32, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(now + 0.55);
       }
     }
 
@@ -897,6 +1125,8 @@
     const copyBtnText = document.getElementById('copy-btn-text');
     const shareXLink = document.getElementById('share-x-link');
     const printCardBtn = document.getElementById('print-card-btn');
+    const downloadPngBtn = document.getElementById('download-png-btn');
+    const downloadPngText = document.getElementById('download-png-text');
     const resetBtn = document.getElementById('reset-btn');
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
@@ -999,15 +1229,30 @@
       // Persist search and update Hall of Flame leaderboard
       recordRoastInLeaderboard(user, roast);
 
-      sound.playBurnSizzle();
-
       // Render into card
       renderRoastCard(roast);
 
-      // Hide terminal, show result
+      // Hide terminal, show result with cinematic impact
       setTimeout(() => {
         terminalSection.classList.add('hidden');
         roastResultSection.classList.remove('hidden');
+        roastResultSection.classList.remove('animate-roast-impact');
+        void roastResultSection.offsetWidth; // trigger reflow
+        roastResultSection.classList.add('animate-roast-impact');
+
+        // Micro-impact screen shake
+        document.body.classList.add('screen-shake');
+        setTimeout(() => document.body.classList.remove('screen-shake'), 400);
+
+        sound.playImpactBoom();
+        sound.playBurnSizzle();
+
+        // Staggered reveal of card elements
+        revealStaggeredCardItems();
+
+        // Animate Ego Annihilation Counter
+        animateEgoCounter(roast.damageScore);
+
         roastBtn.disabled = false;
         roastBtn.classList.remove('opacity-50', 'cursor-not-allowed');
         roastResultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1115,7 +1360,8 @@
 
       // Archetype & Damage
       document.getElementById('card-archetype').textContent = roast.archetype;
-      document.getElementById('roast-damage-badge').textContent = `🔥 Ego Annihilated: ${roast.damageScore}%`;
+      const egoScoreEl = document.getElementById('ego-score-value');
+      if (egoScoreEl) egoScoreEl.textContent = '0';
 
       // Roast Paragraphs
       document.getElementById('card-roast-headline').textContent = `"${roast.headline}"`;
@@ -1129,10 +1375,10 @@
       badgesContainer.innerHTML = '';
       roast.badges.forEach(b => {
         const badgeEl = document.createElement('div');
-        badgeEl.className = 'p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 flex flex-col justify-between';
+        badgeEl.className = 'p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 flex flex-col justify-between dishonor-badge-card hover:border-red-500/50 hover:bg-zinc-950/90 transition-all';
         badgeEl.innerHTML = `
           <div class="flex items-center gap-2 mb-1.5">
-            <span class="text-base">${b.icon}</span>
+            <span class="text-base group-hover:scale-110 transition-transform">${b.icon}</span>
             <span class="text-xs font-mono font-bold text-zinc-200 truncate">${b.title}</span>
           </div>
           <p class="text-[11px] text-zinc-400 font-sans leading-tight line-clamp-2">${b.desc}</p>
@@ -1146,6 +1392,50 @@
       // Twitter / X intent share link
       const tweetText = `My GitHub profile (@${u.login}) was just brutally roasted by GitRoast!\n\nDiagnosed Archetype: ${roast.archetype}\nEgo Annihilation: ${roast.damageScore}%\n"${roast.headline}"\n\nRoast yours at GitRoast:`;
       shareXLink.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+    }
+
+    // Animate Ego Annihilation Counter
+    let counterInterval = null;
+    function animateEgoCounter(targetScore) {
+      const el = document.getElementById('ego-score-value');
+      const badge = document.getElementById('roast-damage-badge');
+      if (!el) return;
+
+      if (counterInterval) cancelAnimationFrame(counterInterval);
+
+      const startTime = performance.now();
+      const duration = 850;
+      
+      function update(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const currentVal = Math.floor(easeOut * targetScore);
+        el.textContent = currentVal;
+
+        if (progress < 1) {
+          if (Math.random() > 0.45) sound.playTick();
+          counterInterval = requestAnimationFrame(update);
+        } else {
+          el.textContent = targetScore;
+          if (badge) {
+            badge.classList.add('scale-105', 'border-red-500');
+            setTimeout(() => badge.classList.remove('scale-105'), 250);
+          }
+        }
+      }
+      counterInterval = requestAnimationFrame(update);
+    }
+
+    // Sequentially reveal card items with staggered delay
+    function revealStaggeredCardItems() {
+      const items = document.querySelectorAll('#printable-roast-card .stagger-item');
+      items.forEach((item, index) => {
+        item.classList.remove('revealed');
+        setTimeout(() => {
+          item.classList.add('revealed');
+        }, index * 80 + 40);
+      });
     }
 
     // Copy Roast to Clipboard
@@ -1188,6 +1478,415 @@ Roasted at GitRoast.dev`;
       sound.playClick();
       window.print();
     });
+
+    // ==========================================
+    // Library-Free HTML5 Canvas PNG Card Exporter
+    // ==========================================
+    async function exportRoastCardToPng() {
+      if (!currentRoastData) {
+        showToast('No roast data to export!');
+        return;
+      }
+
+      sound.playClick();
+      const r = currentRoastData;
+      const u = r.user;
+
+      if (downloadPngText) downloadPngText.textContent = 'Generating...';
+      if (downloadPngBtn) downloadPngBtn.disabled = true;
+
+      try {
+        // High-DPI Canvas Setup (1200 x 900 for razor-sharp social cards)
+        const canvas = document.createElement('canvas');
+        const W = 1200;
+        const H = 900;
+        canvas.width = W;
+        canvas.height = H;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Could not obtain 2D canvas context');
+
+        // Helper: Rounded Rectangle Path
+        function roundRect(x, y, w, h, radius) {
+          const r = Math.min(radius, w / 2, h / 2);
+          ctx.beginPath();
+          ctx.moveTo(x + r, y);
+          ctx.lineTo(x + w - r, y);
+          ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+          ctx.lineTo(x + w, y + h - r);
+          ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+          ctx.lineTo(x + r, y + h);
+          ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+          ctx.lineTo(x, y + r);
+          ctx.quadraticCurveTo(x, y, x + r, y);
+          ctx.closePath();
+        }
+
+        // Helper: Multi-line text wrapping with max lines & ellipsis
+        function drawWrappedText(text, x, y, maxWidth, lineHeight, maxLines = 10) {
+          const words = String(text || '').split(' ');
+          let line = '';
+          let lines = [];
+
+          for (let n = 0; n < words.length; n++) {
+            const testLine = line + (line ? ' ' : '') + words[n];
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth && n > 0) {
+              lines.push(line);
+              line = words[n];
+              if (lines.length === maxLines - 1) {
+                // Last allowed line: gather remaining and add ellipsis
+                let remaining = words.slice(n).join(' ');
+                while (ctx.measureText(remaining + '...').width > maxWidth && remaining.length > 0) {
+                  remaining = remaining.substring(0, remaining.length - 1);
+                }
+                lines.push((remaining.trim()) + '...');
+                line = '';
+                break;
+              }
+            } else {
+              line = testLine;
+            }
+          }
+          if (line) lines.push(line);
+
+          for (let i = 0; i < lines.length; i++) {
+            ctx.fillText(lines[i], x, y + (i * lineHeight));
+          }
+          return lines.length * lineHeight;
+        }
+
+        // 1. Deep Dark Background
+        ctx.fillStyle = '#09090b';
+        ctx.fillRect(0, 0, W, H);
+
+        // 2. Cyberpunk Grid Lines
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+        ctx.lineWidth = 1;
+        const gridSize = 40;
+        for (let x = 0; x <= W; x += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, H);
+          ctx.stroke();
+        }
+        for (let y = 0; y <= H; y += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(W, y);
+          ctx.stroke();
+        }
+
+        // 3. Ambient Glow Nebulas
+        const gradRed = ctx.createRadialGradient(W - 80, 80, 20, W - 80, 80, 320);
+        gradRed.addColorStop(0, 'rgba(239, 68, 68, 0.18)');
+        gradRed.addColorStop(1, 'rgba(239, 68, 68, 0)');
+        ctx.fillStyle = gradRed;
+        ctx.fillRect(0, 0, W, H);
+
+        const gradPurple = ctx.createRadialGradient(80, H - 80, 20, 80, H - 80, 320);
+        gradPurple.addColorStop(0, 'rgba(139, 92, 246, 0.16)');
+        gradPurple.addColorStop(1, 'rgba(139, 92, 246, 0)');
+        ctx.fillStyle = gradPurple;
+        ctx.fillRect(0, 0, W, H);
+
+        // 4. Main Roast Card Body
+        const cardX = 36;
+        const cardY = 36;
+        const cardW = W - 72;
+        const cardH = H - 72;
+
+        roundRect(cardX, cardY, cardW, cardH, 20);
+        ctx.fillStyle = 'rgba(24, 24, 27, 0.94)';
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(239, 68, 68, 0.45)';
+        ctx.stroke();
+
+        // Cyberpunk Corner HUD Accents
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 3;
+        // Top-left corner
+        ctx.beginPath();
+        ctx.moveTo(cardX - 1, cardY + 22);
+        ctx.lineTo(cardX - 1, cardY - 1);
+        ctx.lineTo(cardX + 22, cardY - 1);
+        ctx.stroke();
+        // Bottom-right corner
+        ctx.strokeStyle = '#8b5cf6';
+        ctx.beginPath();
+        ctx.moveTo(cardX + cardW - 22, cardY + cardH + 1);
+        ctx.lineTo(cardX + cardW + 1, cardY + cardH + 1);
+        ctx.lineTo(cardX + cardW + 1, cardY + cardH - 22);
+        ctx.stroke();
+
+        // 5. Avatar Drawing (with CORS fallback)
+        const avatarSize = 82;
+        const avatarX = cardX + 32;
+        const avatarY = cardY + 32;
+
+        let avatarLoaded = false;
+        if (u.avatar_url) {
+          try {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            const loadPromise = new Promise((resolve, reject) => {
+              img.onload = () => resolve(img);
+              img.onerror = reject;
+              setTimeout(reject, 1800); // 1.8s timeout
+            });
+            img.src = u.avatar_url;
+            await loadPromise;
+
+            ctx.save();
+            roundRect(avatarX, avatarY, avatarSize, avatarSize, 14);
+            ctx.clip();
+            ctx.drawImage(img, avatarX, avatarY, avatarSize, avatarSize);
+            ctx.restore();
+            avatarLoaded = true;
+          } catch (e) {
+            avatarLoaded = false;
+          }
+        }
+
+        if (!avatarLoaded) {
+          // Fallback Cyberpunk Initial Avatar
+          roundRect(avatarX, avatarY, avatarSize, avatarSize, 14);
+          ctx.fillStyle = '#27272a';
+          ctx.fill();
+          ctx.font = 'bold 36px monospace';
+          ctx.fillStyle = '#a855f7';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          const initials = (u.name || u.login || 'D').substring(0, 2).toUpperCase();
+          ctx.fillText(initials, avatarX + avatarSize / 2, avatarY + avatarSize / 2);
+        }
+
+        // Avatar Border & Flame Badge
+        roundRect(avatarX, avatarY, avatarSize, avatarSize, 14);
+        ctx.strokeStyle = '#a855f7';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        // Mini Flame Marker on Avatar
+        roundRect(avatarX + avatarSize - 22, avatarY + avatarSize - 22, 26, 26, 13);
+        ctx.fillStyle = '#09090b';
+        ctx.fill();
+        ctx.strokeStyle = '#27272a';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.font = '14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🔥', avatarX + avatarSize - 9, avatarY + avatarSize - 9);
+
+        // 6. Header Texts: Name, Username, Bio, Stats
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+
+        // User Display Name
+        ctx.font = 'bold 26px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillStyle = '#ffffff';
+        const displayName = u.name || u.login || 'Anonymous Developer';
+        ctx.fillText(displayName, avatarX + avatarSize + 22, avatarY + 4);
+
+        // Username Handle
+        const nameWidth = ctx.measureText(displayName).width;
+        ctx.font = 'bold 16px "SF Mono", Monaco, Consolas, monospace';
+        ctx.fillStyle = '#c084fc';
+        ctx.fillText(`@${u.login}`, avatarX + avatarSize + 22 + nameWidth + 12, avatarY + 11);
+
+        // Bio Text
+        ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillStyle = '#a1a1aa';
+        const bioText = (u.bio || 'No bio provided. The commits speak loud enough.').replace(/[\r\n]+/g, ' ');
+        const bioMaxWidth = 520;
+        let truncatedBio = bioText;
+        while (ctx.measureText(truncatedBio).width > bioMaxWidth && truncatedBio.length > 0) {
+          truncatedBio = truncatedBio.substring(0, truncatedBio.length - 1);
+        }
+        if (truncatedBio.length < bioText.length) truncatedBio += '...';
+        ctx.fillText(truncatedBio, avatarX + avatarSize + 22, avatarY + 38);
+
+        // Stats Badges Row
+        ctx.font = '13px "SF Mono", Monaco, Consolas, monospace';
+        ctx.fillStyle = '#71717a';
+        const repoCount = u.public_repos !== undefined ? u.public_repos : (r.repos.length || 0);
+        const followerCount = u.followers !== undefined ? (u.followers >= 1000 ? `${(u.followers/1000).toFixed(1)}k` : u.followers) : 0;
+        const joinYear = new Date(u.created_at || '2022-01-01').getFullYear();
+        const yrs = Math.max(1, new Date().getFullYear() - joinYear);
+        ctx.fillText(`📦 ${repoCount} repos   ·   👥 ${followerCount} followers   ·   ⏳ ${yrs} yrs on Git`, avatarX + avatarSize + 22, avatarY + 62);
+
+        // 7. Diagnosed Archetype Box (Top Right)
+        const archW = 310;
+        const archH = 76;
+        const archX = cardX + cardW - archW - 32;
+        const archY = cardY + 34;
+
+        roundRect(archX, archY, archW, archH, 12);
+        ctx.fillStyle = 'rgba(9, 9, 11, 0.85)';
+        ctx.fill();
+        ctx.strokeStyle = '#27272a';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.font = 'bold 10px "SF Mono", Monaco, Consolas, monospace';
+        ctx.fillStyle = '#71717a';
+        ctx.fillText('DIAGNOSED ARCHETYPE', archX + 16, archY + 14);
+
+        // Gradient Archetype Text
+        ctx.font = 'bold 17px "SF Mono", Monaco, Consolas, monospace';
+        const archGrad = ctx.createLinearGradient(archX + 16, 0, archX + archW - 16, 0);
+        archGrad.addColorStop(0, '#f87171');
+        archGrad.addColorStop(0.5, '#c084fc');
+        archGrad.addColorStop(1, '#fcd34d');
+        ctx.fillStyle = archGrad;
+        drawWrappedText(r.archetype, archX + 16, archY + 34, archW - 32, 20, 2);
+
+        // Separator Line
+        ctx.strokeStyle = 'rgba(39, 39, 42, 0.8)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(cardX + 32, cardY + 130);
+        ctx.lineTo(cardX + cardW - 32, cardY + 130);
+        ctx.stroke();
+
+        // 8. Executive Roast Summary Headline
+        ctx.font = 'bold 12px "SF Mono", Monaco, Consolas, monospace';
+        ctx.fillStyle = '#ef4444';
+        ctx.fillText(`☠️  EXECUTIVE ROAST SUMMARY  ·  EGO ANNIHILATED: ${r.damageScore}%`, cardX + 32, cardY + 146);
+
+        ctx.font = 'bold 22px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillStyle = '#ffffff';
+        drawWrappedText(`"${r.headline}"`, cardX + 32, cardY + 172, cardW - 64, 28, 2);
+
+        // 9. Three Column Analysis Breakdown
+        const colY = cardY + 234;
+        const colW = (cardW - 64 - 36) / 3;
+        const colH = 155;
+
+        const columns = [
+          { title: '⚡ Commit Discipline', text: r.commitsRoast, color: '#c084fc' },
+          { title: '📦 Tech Stack Graveyard', text: r.stackRoast, color: '#f87171' },
+          { title: '🎭 Bio vs Reality', text: r.bioRoast, color: '#fbbf24' }
+        ];
+
+        columns.forEach((col, idx) => {
+          const colX = cardX + 32 + idx * (colW + 18);
+          roundRect(colX, colY, colW, colH, 12);
+          ctx.fillStyle = 'rgba(9, 9, 11, 0.75)';
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(39, 39, 42, 0.85)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Column Header
+          ctx.font = 'bold 13px "SF Mono", Monaco, Consolas, monospace';
+          ctx.fillStyle = col.color;
+          ctx.fillText(col.title, colX + 14, colY + 14);
+
+          // Divider
+          ctx.strokeStyle = 'rgba(39, 39, 42, 0.6)';
+          ctx.beginPath();
+          ctx.moveTo(colX + 14, colY + 36);
+          ctx.lineTo(colX + colW - 14, colY + 36);
+          ctx.stroke();
+
+          // Paragraph
+          ctx.font = '13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = '#d4d4d8';
+          drawWrappedText(col.text, colX + 14, colY + 48, colW - 28, 19, 5);
+        });
+
+        // 10. Four Dishonor Badges
+        const badgeY = colY + colH + 20;
+        ctx.font = 'bold 11px "SF Mono", Monaco, Consolas, monospace';
+        ctx.fillStyle = '#71717a';
+        ctx.fillText('ACCREDITED DISHONOR BADGES', cardX + 32, badgeY);
+
+        const bGridY = badgeY + 18;
+        const bW = (cardW - 64 - 36) / 4;
+        const bH = 80;
+
+        (r.badges || []).slice(0, 4).forEach((b, idx) => {
+          const bX = cardX + 32 + idx * (bW + 12);
+          roundRect(bX, bGridY, bW, bH, 10);
+          ctx.fillStyle = 'rgba(9, 9, 11, 0.75)';
+          ctx.fill();
+          ctx.strokeStyle = '#27272a';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Icon & Title
+          ctx.font = 'bold 13px "SF Mono", Monaco, Consolas, monospace';
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(`${b.icon || '⚠️'} ${b.title}`, bX + 12, bGridY + 14);
+
+          // Badge Desc
+          ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = '#a1a1aa';
+          drawWrappedText(b.desc, bX + 12, bGridY + 38, bW - 24, 16, 2);
+        });
+
+        // 11. Silver Lining / Backhanded Compliment Box
+        const compY = bGridY + bH + 20;
+        const compH = 88;
+
+        roundRect(cardX + 32, compY, cardW - 64, compH, 12);
+        const compGrad = ctx.createLinearGradient(cardX + 32, 0, cardX + cardW - 32, 0);
+        compGrad.addColorStop(0, 'rgba(88, 28, 135, 0.35)');
+        compGrad.addColorStop(0.5, 'rgba(24, 24, 27, 0.9)');
+        compGrad.addColorStop(1, 'rgba(153, 27, 27, 0.25)');
+        ctx.fillStyle = compGrad;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(147, 51, 234, 0.45)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.font = 'bold 11px "SF Mono", Monaco, Consolas, monospace';
+        ctx.fillStyle = '#c084fc';
+        ctx.fillText('✨  SILVER LINING / BACKHANDED COMPLIMENT', cardX + 50, compY + 16);
+
+        ctx.font = 'italic 14px "SF Mono", Monaco, Consolas, monospace';
+        ctx.fillStyle = '#f4f4f5';
+        drawWrappedText(`"${r.compliment}"`, cardX + 50, compY + 38, cardW - 100, 20, 2);
+
+        // 12. Card Footer & Watermark
+        const footerY = cardY + cardH - 24;
+        ctx.font = 'bold 12px "SF Mono", Monaco, Consolas, monospace';
+        ctx.fillStyle = '#ef4444';
+        ctx.fillText('GitRoast.dev', cardX + 32, footerY);
+
+        ctx.fillStyle = '#52525b';
+        ctx.fillText('//  Ego Destruction Protocol v2.4', cardX + 130, footerY);
+
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#71717a';
+        const todayStr = new Date().toISOString().split('T')[0];
+        ctx.fillText(`Timestamp: ${todayStr}   ·   Certified Spaghetti Code`, cardX + cardW - 32, footerY);
+
+        // 13. Trigger Direct PNG Download
+        const dataUrl = canvas.toDataURL('image/png');
+        const downloadLink = document.createElement('a');
+        downloadLink.download = `gitroast-${u.login || 'dev'}.png`;
+        downloadLink.href = dataUrl;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        sound.playBurnSizzle();
+        showToast('📸 Roast card saved as clean PNG image!');
+      } catch (err) {
+        console.error('PNG Export failed:', err);
+        showToast('Export failed. Try Print / PDF instead.');
+      } finally {
+        if (downloadPngText) downloadPngText.textContent = 'Download Image (PNG)';
+        if (downloadPngBtn) downloadPngBtn.disabled = false;
+      }
+    }
+
+    if (downloadPngBtn) {
+      downloadPngBtn.addEventListener('click', exportRoastCardToPng);
+    }
 
     // ==========================================
     // Hall of Flame: LocalStorage Leaderboard
@@ -1376,6 +2075,169 @@ Roasted at GitRoast.dev`;
       lucide.createIcons();
     }
 
+    // ==========================================
+    // Interactive Living Background & Embers
+    // ==========================================
+    function initAmbientBackground() {
+      const canvas = document.getElementById('ambient-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      let mouse = { x: width * 0.5, y: height * 0.35, active: false };
+
+      // Update CSS spotlight coordinates smoothly
+      const updateSpotlight = (x, y) => {
+        document.documentElement.style.setProperty('--mouse-x', `${x}px`);
+        document.documentElement.style.setProperty('--mouse-y', `${y}px`);
+      };
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        mouse.active = true;
+        updateSpotlight(e.clientX, e.clientY);
+      }, { passive: true });
+
+      // Handle window resize with debounce
+      let resizeTimer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        }, 150);
+      });
+
+      // Embers & Sparks Palette
+      const particleColors = [
+        'rgba(239, 68, 68, ',   // neon crimson
+        'rgba(245, 158, 11, ',  // warm amber flame
+        'rgba(139, 92, 246, ',  // electric violet
+        'rgba(220, 38, 38, '    // dark fiery red
+      ];
+
+      const PARTICLE_COUNT = Math.min(50, Math.max(25, Math.floor(window.innerWidth / 28)));
+      const particles = [];
+
+      class EmberParticle {
+        constructor() {
+          this.reset(true);
+        }
+        reset(initial = false) {
+          this.x = Math.random() * width;
+          this.y = initial ? Math.random() * height : height + 10 + Math.random() * 30;
+          this.radius = 0.8 + Math.random() * 2;
+          this.vy = -(0.35 + Math.random() * 0.75); // upward buoyancy drift
+          this.vx = (Math.random() - 0.5) * 0.35;
+          this.colorBase = particleColors[Math.floor(Math.random() * particleColors.length)];
+          this.maxAlpha = 0.25 + Math.random() * 0.5;
+          this.alpha = initial ? Math.random() * this.maxAlpha : 0;
+          this.fadeIn = true;
+          this.swaySpeed = 0.01 + Math.random() * 0.018;
+          this.swayOffset = Math.random() * Math.PI * 2;
+          this.swayWidth = 0.4 + Math.random() * 1.2;
+        }
+        update() {
+          this.swayOffset += this.swaySpeed;
+          this.x += Math.sin(this.swayOffset) * this.swayWidth + this.vx;
+          this.y += this.vy;
+
+          // Mouse proximity soft deflection
+          if (mouse.active) {
+            const dx = this.x - mouse.x;
+            const dy = this.y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120 && dist > 0) {
+              const force = (120 - dist) / 120 * 0.75;
+              this.x += (dx / dist) * force;
+              this.y += (dy / dist) * force;
+            }
+          }
+
+          // Gentle fade in / fade out
+          if (this.fadeIn) {
+            this.alpha += 0.012;
+            if (this.alpha >= this.maxAlpha) this.fadeIn = false;
+          } else if (this.y < height * 0.3) {
+            this.alpha -= 0.007;
+          }
+
+          if (this.y < -20 || this.alpha <= 0 || this.x < -20 || this.x > width + 20) {
+            this.reset(false);
+          }
+        }
+        draw(c) {
+          c.beginPath();
+          c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          c.fillStyle = `${this.colorBase}${Math.max(0, this.alpha.toFixed(3))})`;
+          c.shadowColor = `${this.colorBase}0.7)`;
+          c.shadowBlur = this.radius * 3;
+          c.fill();
+        }
+      }
+
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(new EmberParticle());
+      }
+
+      let isVisible = true;
+      document.addEventListener('visibilitychange', () => {
+        isVisible = !document.hidden;
+        if (isVisible) requestAnimationFrame(loop);
+      });
+
+      function loop() {
+        if (!isVisible) return;
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw(ctx);
+        }
+
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+    }
+
+    // ==========================================
+    // Interactive 3D Card Tilt & Holographic Specular
+    // ==========================================
+    function initCardTilt() {
+      const card = document.getElementById('printable-roast-card');
+      if (!card || !window.matchMedia('(hover: hover)').matches) return;
+
+      let rafId = null;
+
+      card.addEventListener('mousemove', (e) => {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          // Limit tilt angle to subtle, premium +/- 5.5 degrees
+          const rotateX = ((y - centerY) / centerY) * -5.5;
+          const rotateY = ((x - centerX) / centerX) * 5.5;
+
+          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.008, 1.008, 1.008)`;
+          card.style.setProperty('--card-mouse-x', `${x}px`);
+          card.style.setProperty('--card-mouse-y', `${y}px`);
+        });
+      }, { passive: true });
+
+      card.addEventListener('mouseleave', () => {
+        if (rafId) cancelAnimationFrame(rafId);
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      });
+    }
+
     // Reset Leaderboard Handler
     const resetLeaderboardBtn = document.getElementById('reset-leaderboard-btn');
     if (resetLeaderboardBtn) {
@@ -1387,10 +2249,12 @@ Roasted at GitRoast.dev`;
       });
     }
 
-    // Initial Lucide Render & Leaderboard Load
+    // Initial Lucide Render & App Initialization
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       renderLeaderboard();
+      initAmbientBackground();
+      initCardTilt();
     });
   </script>
 </body>
