@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://github-shame-engine.vercel.app/sitemap.xml
