@@ -2,5 +2,7 @@
   "name": "GitRoast",
   "description": "AI GitHub Roaster & Ego Destroyer - brutally roast your GitHub profile, commit crimes, and abandoned side projects.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
