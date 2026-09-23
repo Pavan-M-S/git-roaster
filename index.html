@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitRoast: AI GitHub Roaster & Ego Destroyer</title>
+  <meta name="description" content="Expose your spaghetti code to the world. Brutal AI-powered GitHub profile roaster and ego destroyer.">
+  <meta property="og:title" content="GitRoast: AI GitHub Roaster & Ego Destroyer">
+  <meta property="og:description" content="Expose your spaghetti code to the world. Brutal AI-powered GitHub profile roaster and ego destroyer.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              purple: '#8b5cf6',
+              crimson: '#ef4444',
+              green: '#22c55e',
+              amber: '#f59e0b'
+            }
+          },
+          fontFamily: {
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace']
+          },
+          animation: {
+            'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'glow-pulse': 'glow 2s ease-in-out infinite alternate',
+          },
+          keyframes: {
+            glow: {
+              '0%': { boxShadow: '0 0 15px rgba(239, 68, 68, 0.3)' },
+              '100%': { boxShadow: '0 0 25px rgba(139, 92, 246, 0.6)' }
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printable-roast-card, #printable-roast-card * {
+        visibility: visible;
+      }
+      #printable-roast-card {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 24px;
+        background: #09090b !important;
+        color: #f4f4f5 !important;
+        border: 2px solid #3f3f46 !important;
+        box-shadow: none !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Scanline effect */
+    .scanlines {
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+      ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.03),
+        rgba(0, 255, 0, 0.01),
+        rgba(0, 0, 255, 0.03)
+      );
+      background-size: 100% 3px, 6px 100%;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #09090b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans selection:bg-red-500/30 selection:text-red-200 antialiased relative overflow-x-hidden">
+
+  <!-- Background Grid Effect -->
+  <div class="fixed inset-0 pointer-events-none z-0">
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#27272a15_1px,transparent_1px),linear-gradient(to_bottom,#27272a15_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-purple-600/10 blur-[130px] rounded-full"></div>
+    <div class="absolute top-96 right-10 w-[450px] h-[300px] bg-red-600/10 blur-[140px] rounded-full"></div>
+  </div>
+
+  <!-- Sound & Quick Controls Bar -->
+  <header class="relative z-10 border-b border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md sticky top-0 no-print">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5 group">
+        <span class="p-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 group-hover:border-red-500 transition-colors">
+          <i data-lucide="flame" class="w-5 h-5"></i>
+        </span>
+        <span class="font-mono font-bold tracking-tight text-lg text-white">Git<span class="text-red-500">Roast</span></span>
+        <span class="text-xs font-mono text-zinc-500 hidden sm:inline-block">/ ego_destroyer</span>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <button id="sound-toggle-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-zinc-800 text-xs font-mono text-zinc-400 hover:text-zinc-200 hover:border-zinc-700 bg-zinc-900/60 transition-colors">
+          <i data-lucide="volume-2" id="sound-icon" class="w-3.5 h-3.5 text-zinc-400"></i>
+          <span id="sound-status">SFX: ON</span>
+        </button>
+
+        <a href="#quick-target" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-red-500/10 border border-red-500/30 text-xs font-mono text-red-400 hover:bg-red-500/20 transition-colors">
+          <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
+          <span>Roast a Dev</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="relative z-10 max-w-4xl mx-auto px-4 py-10 sm:py-16 space-y-12">
+
+    <!-- Hero Section -->
+    <section class="text-center space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 text-xs font-mono tracking-wide">
+        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+        AI Commit Crime Investigator &amp; Ego Destroyer
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white max-w-2xl mx-auto leading-[1.1]">
+        Expose Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-purple-500 to-amber-500">Spaghetti Code</span> to the World.
+      </h1>
+
+      <p class="text-zinc-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+        Drop any GitHub handle. We'll scan repo graveyards, commit timestamps, empty readmes, and delusion levels to deliver brutal, emotional damage.
+      </p>
+
+      <!-- Target Input Box -->
+      <div id="quick-target" class="pt-4 max-w-xl mx-auto">
+        <div class="relative bg-zinc-900/90 backdrop-blur-md p-2 rounded-xl border-2 border-zinc-800 hover:border-zinc-700 focus-within:border-red-500/80 transition-all shadow-2xl">
+          <form id="roast-form" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            
+            <div class="flex items-center flex-1 px-3 py-2 bg-zinc-950/60 rounded-lg border border-zinc-800/80">
+              <span class="text-zinc-500 font-mono text-base font-semibold mr-1">@</span>
+              <input 
+                type="text" 
+                id="username-input" 
+                placeholder="github_username (e.g. torvalds)" 
+                required
+                autocomplete="off"
+                spellcheck="false"
+                class="w-full bg-transparent text-white font-mono placeholder:text-zinc-600 focus:outline-none text-sm sm:text-base"
+              />
+            </div>
+
+            <!-- Roast Mode Selector -->
+            <div class="flex items-center gap-1.5">
+              <select 
+                id="roast-mode" 
+                class="bg-zinc-950/90 text-zinc-300 font-mono text-xs rounded-lg px-2.5 py-3 border border-zinc-800 focus:outline-none focus:border-purple-500 cursor-pointer"
+                title="Select Roast Intensity"
+              >
+                <option value="mild">🌶️ Mild (Passive-Aggressive)</option>
+                <option value="spicy" selected>🔥 Spicy (Senior Architect)</option>
+                <option value="nuclear">☢️ Nuclear (Emotional Damage)</option>
+              </select>
+
+              <!-- Roast Button -->
+              <button 
+                type="submit" 
+                id="roast-btn"
+                class="px-5 py-3 rounded-lg bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white font-mono font-bold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 active:scale-95 transition-all whitespace-nowrap cursor-pointer"
+              >
+                <span>🔥 Roast Me</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Quick Select Pills -->
+        <div class="flex items-center justify-center flex-wrap gap-2 mt-4 text-xs font-mono">
+          <span class="text-zinc-500">Quick Victims:</span>
+          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-400 text-zinc-400 transition-colors" data-user="torvalds">@torvalds</button>
+          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-400 text-zinc-400 transition-colors" data-user="shadcn">@shadcn</button>
+          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-400 text-zinc-400 transition-colors" data-user="gaearon">@gaearon</button>
+          <button type="button" class="quick-user-pill px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/50 hover:text-purple-400 text-zinc-400 transition-colors" data-user="karpathy">@karpathy</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hacker Terminal Loading Section (Hidden by default) -->
+    <section id="terminal-section" class="hidden">
+      <div class="bg-zinc-900/95 border-2 border-red-500/40 rounded-xl overflow-hidden shadow-2xl backdrop-blur-md scanlines">
+        <!-- Terminal Header -->
+        <div class="px-4 py-2.5 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between font-mono text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+            <span class="ml-2 text-zinc-400 font-semibold" id="terminal-title">gitroast-auditor // analysis_in_progress</span>
+          </div>
+          <button id="skip-terminal-btn" class="text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1 text-[11px]">
+            <span>Fast Forward</span>
+            <i data-lucide="fast-forward" class="w-3 h-3"></i>
+          </button>
+        </div>
+
+        <!-- Terminal Body -->
+        <div class="p-6 font-mono text-xs sm:text-sm space-y-2 min-h-[220px]">
+          <div id="terminal-logs" class="space-y-1.5 text-zinc-300">
+            <!-- Dynamic logs will be appended here -->
+          </div>
+          <div class="flex items-center gap-2 text-red-400 pt-2 font-semibold">
+            <span class="animate-spin inline-block">⚙️</span>
+            <span id="terminal-active-step">Initializing deep reposcan...</span>
+            <span class="inline-block w-2 h-4 bg-red-400 animate-pulse"></span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-zinc-950 h-2 rounded-full overflow-hidden mt-4 border border-zinc-800">
+            <div id="terminal-progress-bar" class="h-full bg-gradient-to-r from-red-600 via-purple-600 to-green-500 transition-all duration-300" style="width: 10%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Viral Roast Result Card (Hidden by default) -->
+    <section id="roast-result-section" class="hidden space-y-6">
+
+      <!-- Action Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 no-print">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300">
+            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+            Audit Completed
+          </span>
+          <span id="roast-damage-badge" class="inline-flex items-center gap-1 text-xs font-mono px-3 py-1 rounded-md bg-red-950/60 border border-red-800/80 text-red-300 font-bold">
+            🔥 Ego Annihilated: 98%
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Copy Roast -->
+          <button id="copy-roast-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-mono text-zinc-200 transition-colors">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span id="copy-btn-text">Copy Roast</span>
+          </button>
+
+          <!-- Share to X -->
+          <a id="share-x-link" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-mono text-sky-400 hover:border-sky-500/50 transition-colors">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            <span>Share to X</span>
+          </a>
+
+          <!-- Print / Save Card -->
+          <button id="print-card-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 text-xs font-mono text-red-300 transition-colors">
+            <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+            <span>Print / Save PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Card Container -->
+      <div id="printable-roast-card" class="relative bg-zinc-900/90 backdrop-blur-md rounded-2xl border-2 border-red-500/40 p-6 sm:p-8 space-y-6 shadow-2xl overflow-hidden">
+        
+        <!-- Glowing Ambient Accents -->
+        <div class="absolute -top-24 -right-24 w-60 h-60 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-60 h-60 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Card Header: Profile Info & Dev Archetype -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
+          <div class="flex items-center gap-4">
+            <div class="relative">
+              <img id="card-avatar" src="" alt="Avatar" class="w-16 h-16 rounded-xl border-2 border-purple-500 object-cover bg-zinc-800" referrerpolicy="no-referrer">
+              <span id="card-mode-icon" class="absolute -bottom-1 -right-1 text-base bg-zinc-950 rounded-full p-0.5 border border-zinc-800">🔥</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h2 id="card-name" class="text-xl font-bold text-white tracking-tight">Linus Torvalds</h2>
+                <a id="card-username-link" href="#" target="_blank" class="text-sm font-mono text-purple-400 hover:underline">@torvalds</a>
+              </div>
+              <p id="card-bio" class="text-xs text-zinc-400 mt-0.5 max-w-md line-clamp-2">Creator of Linux &amp; Git. Occasional kernel curmudgeon.</p>
+              <div class="flex items-center gap-3 mt-2 text-xs font-mono text-zinc-500">
+                <span id="card-stat-repos">📦 14 repos</span>
+                <span>·</span>
+                <span id="card-stat-followers">👥 210k followers</span>
+                <span>·</span>
+                <span id="card-stat-age">⏳ 12 yrs on Git</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dev Archetype Pill -->
+          <div class="self-stretch sm:self-auto flex flex-col items-start sm:items-end justify-center bg-zinc-950/70 border border-zinc-800 px-4 py-3 rounded-xl">
+            <span class="text-[10px] uppercase font-mono tracking-widest text-zinc-500">Diagnosed Archetype</span>
+            <span id="card-archetype" class="text-sm sm:text-base font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-purple-400 to-amber-300">
+              Tutorial Hell Veteran
+            </span>
+          </div>
+        </div>
+
+        <!-- Devastating Roast Headline -->
+        <div class="space-y-2">
+          <span class="text-[11px] font-mono uppercase tracking-wider text-red-400 font-bold flex items-center gap-1.5">
+            <i data-lucide="skull" class="w-3.5 h-3.5"></i>
+            Executive Roast Summary
+          </span>
+          <h3 id="card-roast-headline" class="text-xl sm:text-2xl font-black text-white leading-snug tracking-tight">
+            "12 Repositories, 0 Stars, and 4 Abandoned Portfolio Redesigns"
+          </h3>
+        </div>
+
+        <!-- 3 Punchy Devastating Paragraphs -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Commit Discipline -->
+          <div class="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-4 space-y-2">
+            <div class="flex items-center gap-2 text-xs font-mono text-zinc-400 font-semibold border-b border-zinc-800/60 pb-2">
+              <i data-lucide="git-commit" class="w-4 h-4 text-purple-400"></i>
+              <span>Commit Discipline</span>
+            </div>
+            <p id="card-roast-commits" class="text-xs text-zinc-300 leading-relaxed font-sans">
+              Analyzing commits reveals a chaotic timeline of 3 AM typo fixes labeled "fixed stuff" and emergency force pushes straight to production main.
+            </p>
+          </div>
+
+          <!-- Tech Stack Graveyard -->
+          <div class="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-4 space-y-2">
+            <div class="flex items-center gap-2 text-xs font-mono text-zinc-400 font-semibold border-b border-zinc-800/60 pb-2">
+              <i data-lucide="layers" class="w-4 h-4 text-red-400"></i>
+              <span>Tech Stack Graveyard</span>
+            </div>
+            <p id="card-roast-stack" class="text-xs text-zinc-300 leading-relaxed font-sans">
+              Collecting modern frameworks like Pokemon cards without finishing the initial tutorial project. 400 npm packages installed for a simple counter app.
+            </p>
+          </div>
+
+          <!-- Bio & Delivery -->
+          <div class="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-4 space-y-2">
+            <div class="flex items-center gap-2 text-xs font-mono text-zinc-400 font-semibold border-b border-zinc-800/60 pb-2">
+              <i data-lucide="user-x" class="w-4 h-4 text-amber-400"></i>
+              <span>Bio vs Reality</span>
+            </div>
+            <p id="card-roast-bio" class="text-xs text-zinc-300 leading-relaxed font-sans">
+              Claims "Full-stack AI Evangelist & Disruptor" in bio, but recent public activity is 3 CSS forks and an issue comment asking for homework answers.
+            </p>
+          </div>
+        </div>
+
+        <!-- 4 Comedic Dishonor Badges -->
+        <div class="space-y-3">
+          <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-500 font-bold block">
+            Accredited Dishonor Badges
+          </span>
+          <div id="card-badges-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+            <!-- Badges injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Backhanded Compliment Box -->
+        <div class="p-4 rounded-xl bg-gradient-to-r from-purple-950/40 via-zinc-900 to-red-950/30 border border-purple-800/40 relative">
+          <div class="text-[11px] font-mono uppercase tracking-wider text-purple-400 font-bold mb-1 flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            Silver Lining / Backhanded Compliment
+          </div>
+          <p id="card-compliment" class="text-xs sm:text-sm text-zinc-200 italic font-mono">
+            "At least your .gitignore is properly formatted. Oh wait, you pushed your OpenAI API key directly to main 3 weeks ago."
+          </p>
+        </div>
+
+        <!-- Card Footer / Watermark -->
+        <div class="pt-4 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-zinc-500 gap-2">
+          <div class="flex items-center gap-2">
+            <span class="text-red-400 font-bold">GitRoast.dev</span>
+            <span>//</span>
+            <span>Ego Destruction Protocol v2.4</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="card-timestamp">Timestamp: 2026-09-23</span>
+            <span class="text-zinc-600">·</span>
+            <span>Certified Spaghetti Code</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Try Another Button -->
+      <div class="text-center pt-2 no-print">
+        <button id="reset-btn" class="px-5 py-2.5 rounded-lg border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-xs font-mono text-zinc-300 transition-colors inline-flex items-center gap-2">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          <span>Roast Another Victim</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- Hall of Flame / What We Analyze Section -->
+    <section class="border-t border-zinc-900 pt-12 space-y-8 no-print">
+      <div class="text-center space-y-2">
+        <h2 class="text-xl sm:text-2xl font-bold font-mono text-white">How The Ego Destroyer Operates</h2>
+        <p class="text-xs sm:text-sm text-zinc-400 max-w-lg mx-auto">
+          We extract public GitHub telemetry and feed it into our satirical algorithmic roast engine.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
+        <div class="p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 space-y-2">
+          <div class="text-red-400 font-bold flex items-center gap-2">
+            <i data-lucide="git-branch" class="w-4 h-4"></i>
+            <span>Commit Hygiene Audit</span>
+          </div>
+          <p class="text-zinc-400 leading-relaxed font-sans">
+            Scrutinizes late-night panic pushes, 2-word commit messages, and mysterious 8-month sabbatical gaps in contribution graphs.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 space-y-2">
+          <div class="text-purple-400 font-bold flex items-center gap-2">
+            <i data-lucide="archive" class="w-4 h-4"></i>
+            <span>Repo Graveyard Scanner</span>
+          </div>
+          <p class="text-zinc-400 leading-relaxed font-sans">
+            Finds all four abandoned clones of TodoMVC, Netflix UI clones, and that revolutionary Web3 startup repo updated once in 2022.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 space-y-2">
+          <div class="text-amber-400 font-bold flex items-center gap-2">
+            <i data-lucide="activity" class="w-4 h-4"></i>
+            <span>Delusion Quotient</span>
+          </div>
+          <p class="text-zinc-400 leading-relaxed font-sans">
+            Calculates the divergence between the grandiose bio ("10x Full-Stack AI Visionary") and the zero-star README files.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="flex items-center gap-2 px-4 py-3 rounded-xl bg-zinc-900 border border-red-500/50 text-white font-mono text-xs shadow-2xl">
+      <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
+      <span id="toast-message">Roast copied to clipboard!</span>
+    </div>
+  </div>
+
+  <!-- Audio Synthesizer (Web Audio API) -->
+  <script>
+    class SoundEngine {
+      constructor() {
+        this.enabled = true;
+        this.ctx = null;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      toggle() {
+        this.enabled = !this.enabled;
+        return this.enabled;
+      }
+      playClick() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(200, this.ctx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.04);
+      }
+      playTerminalBeep() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800 + Math.random() * 400, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.03);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.03);
+      }
+      playBurnSizzle() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        // Low boom
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 0.4);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(now + 0.45);
+      }
+    }
+
+    const sound = new SoundEngine();
+
+    // Sound toggle event
+    const soundToggleBtn = document.getElementById('sound-toggle-btn');
+    const soundStatus = document.getElementById('sound-status');
+    const soundIcon = document.getElementById('sound-icon');
+
+    soundToggleBtn.addEventListener('click', () => {
+      const active = sound.toggle();
+      soundStatus.textContent = active ? 'SFX: ON' : 'SFX: OFF';
+      soundStatus.className = active ? 'text-zinc-300' : 'text-zinc-500';
+      if (active) {
+        sound.playClick();
+      }
+    });
+  </script>
+
+  <!-- Core App Logic: GitHub API, Roast Generator, Badges & Social Card -->
+  <script>
+    // State
+    let currentRoastData = null;
+    let terminalTimeout = null;
+
+    // Famous users preset overrides (in case of rate-limiting or for high-octane accuracy)
+    const PRESETS = {
+      torvalds: {
+        archetype: "Kernel Dictator with anger issues",
+        headline: "Invented Git so he'd never have to speak to another human being",
+        commits: "Reviews pull requests by reducing junior developers to subatomic weeping particles in Linux kernel mailing lists.",
+        stack: "Believes anything invented after C (1972) is bloated hipster garbage. Still edits code via pure testosterone and raw email patches.",
+        bio: "Doesn't have a bio because his ego has its own dedicated NUMA node and kernel subsystem.",
+        compliment: "Literally powers 99.8% of global cloud infrastructure, but would still reject your PR for using tabs instead of spaces.",
+        badges: [
+          { icon: "⚠️", title: "C > Everything", desc: "Refuses to learn Rust out of spite" },
+          { icon: "📧", title: "Mailing List Tyrant", desc: "Emotional damage delivered via plain text" },
+          { icon: "🐧", title: "Penguin Overlord", desc: "Replaces your OS while you sleep" },
+          { icon: "🔥", title: "Zero Merge Conflicts", desc: "Because everyone else is afraid to commit" }
+        ]
+      },
+      shadcn: {
+        archetype: "The Copy-Paste Cartel Boss",
+        headline: "Convinced an entire generation of developers that ctrl+c, ctrl+v is a package manager",
+        commits: "Pushes 400 components directly into your src/components directory without apologizing for the node_modules inflation.",
+        stack: "Single-handedly keeping Radix UI, Tailwind CSS, and Lucide in business with immaculate neutral-900 border radii.",
+        bio: "Doesn't need an npm registry when millions of devs clone his components every Monday morning like digital hoarders.",
+        compliment: "Made 90% of Silicon Valley MVP dashboards look like an $80k design studio built them in 10 minutes.",
+        badges: [
+          { icon: "📋", title: "Zero Dependencies", desc: "Just 48 files dropped in your repo" },
+          { icon: "🎨", title: "Neutral-950 Worship", desc: "Banned colors from modern web apps" },
+          { icon: "⚡", title: "CLI Cult Leader", desc: "npx shadcn@latest add personality" },
+          { icon: "🕶️", title: "Minimalist Enigma", desc: "No profile picture, 100k disciples" }
+        ]
+      },
+      gaearon: {
+        archetype: "Hooks Philosophy Traumatizer",
+        headline: "Gave us Redux to solve state, then spent 5 years watching us suffer with useEffect dependencies",
+        commits: "Commit history contains more architectural paradigm shifts than the entire Roman Empire.",
+        stack: "Wrote Redux in a weekend to win a hackathon, accidentally created a decade of boilerplate existential misery.",
+        bio: "React core alumnus who went to work on Overreacted and then quietly stepped back to watch the world debate server components.",
+        compliment: "Revolutionized frontend state management before everyone else was still wrestling with jQuery selectors.",
+        badges: [
+          { icon: "🪝", title: "useEffect Loop Victim", desc: "Forgot array dependency once in 2018" },
+          { icon: "⚛️", title: "Redux Boogeyman", desc: "Spawned 10,000 action types" },
+          { icon: "☕", title: "Overreacted Author", desc: "Deep philosophical essays on closures" },
+          { icon: "🧘", title: "Retired From React", desc: "Watching RSC wars from a safe distance" }
+        ]
+      },
+      karpathy: {
+        archetype: "Raw CUDA Sorcerer & Vibe Prophet",
+        headline: "Can train a transformer from scratch in C faster than you can npm install axios",
+        commits: "Commits clean, pristine micrograd and nanoGPT repositories that make 20-person AI startup codebases look like kindergarten drawings.",
+        stack: "Pure PyTorch, raw C pointers, zero bloat, and whatever LLM fits inside an A100 VRAM buffer.",
+        bio: "Former Director of AI at Tesla and OpenAI founding team. Teaching millions how neural nets really tick while wearing a Rubik's cube shirt.",
+        compliment: "The only person on earth who can explain backpropagation so clearly that even your marketing manager almost understands it.",
+        badges: [
+          { icon: "🧠", title: "nanoGPT Overlord", desc: "Wrote GPT-2 in 300 lines of Python" },
+          { icon: "🚀", title: "CUDA Whisperer", desc: "Skips PyTorch when feeling athletic" },
+          { icon: "🤖", title: "Self-Driving Architect", desc: "Trained cars to navigate California" },
+          { icon: "🧩", title: "Pure Math Aura", desc: "Computes matrix dot products by hand" }
+        ]
+      }
+    };
+
+    // Helper: Pick random item from list based on seed
+    function pickByHash(list, str, offset = 0) {
+      let hash = offset;
+      for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
+        hash |= 0;
+      }
+      const index = Math.abs(hash) % list.length;
+      return list[index];
+    }
+
+    // Dynamic Roast Synthesis Engine
+    function synthesizeRoast(user, repos, mode = 'spicy') {
+      const username = user.login.toLowerCase();
+      
+      // If we have a hand-crafted burn for this famous dev, use it with intensity adjustments
+      if (PRESETS[username]) {
+        const p = PRESETS[username];
+        return {
+          user,
+          repos,
+          archetype: p.archetype,
+          headline: p.headline,
+          commitsRoast: p.commits,
+          stackRoast: p.stack,
+          bioRoast: p.bio,
+          compliment: p.compliment,
+          badges: p.badges,
+          damageScore: mode === 'nuclear' ? 100 : (mode === 'spicy' ? 95 : 82)
+        };
+      }
+
+      // Analyze metrics
+      const repoCount = user.public_repos || repos.length || 0;
+      const followers = user.followers || 0;
+      const following = user.following || 0;
+      const bio = (user.bio || '').trim();
+      const accountYears = Math.max(1, new Date().getFullYear() - new Date(user.created_at || '2022-01-01').getFullYear());
+
+      // Language frequency analysis
+      const langCounts = {};
+      let totalStars = 0;
+      let totalForks = 0;
+      let lastPushDaysAgo = 999;
+
+      repos.forEach(repo => {
+        if (repo.language) {
+          langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
+        }
+        totalStars += (repo.stargazers_count || 0);
+        totalForks += (repo.forks_count || 0);
+        if (repo.pushed_at) {
+          const days = Math.round((new Date() - new Date(repo.pushed_at)) / (1000 * 60 * 60 * 24));
+          if (days < lastPushDaysAgo) lastPushDaysAgo = days;
+        }
+      });
+
+      const topLang = Object.keys(langCounts).sort((a,b) => langCounts[b] - langCounts[a])[0] || "JavaScript";
+
+      // 1. Archetype generation
+      const archetypes = [
+        "Tutorial Hell Veteran",
+        "Framework Hopper with 0 Deploys",
+        "Vibe Coder with 0 Commits",
+        "npm i everything Specialist",
+        "Senior Documentation Procrastinator",
+        "git push --force Addict",
+        "Tailwind CSS Maximalist",
+        "Full-Stack in Bio, HTML in Git",
+        "Dark Mode Terminal Overlord",
+        "Zombie Repo Hoarder",
+        "StackOverflow Copy-Paste Architect",
+        "Perpetual Portfolio Redesigner"
+      ];
+      const archetype = pickByHash(archetypes, username, repoCount);
+
+      // 2. Roast Headline
+      const headlines = [
+        `${repoCount} Repositories, ${totalStars} Stars, and 4 Abandoned Portfolio Redesigns`,
+        `Has ${followers} followers and none of them have ever dared clone your code`,
+        `Spends 4 hours configuring Neovim to write 6 lines of broken ${topLang}`,
+        `Your GitHub profile is a digital graveyard of unfinished Sunday afternoon epiphanies`,
+        `Committing directly to main since ${new Date(user.created_at || '2021').getFullYear()} like an absolute menace`,
+        `Writing code that even ChatGPT refuses to refactor without a safety warning`,
+        `More forks than the local diner, and not a single one has ever contributed a PR`
+      ];
+      const headline = pickByHash(headlines, username, followers + repoCount);
+
+      // 3. Commits Roast based on mode
+      let commitsRoast = "";
+      if (mode === 'mild') {
+        commitsRoast = `Your commit logs read like a polite panic attack: "fixed typo", "actually fixed typo", "please work", and the classic 2:45 AM "wip". We appreciate your dedication to testing in production.`;
+      } else if (mode === 'nuclear') {
+        commitsRoast = `Your git history is a war crime against version control. Pushing direct to main branch with commit messages like "asdfgh" and "final_final_v3". If git blame was a criminal court, you'd be serving three consecutive life sentences.`;
+      } else {
+        commitsRoast = `Commit discipline is essentially non-existent. A sporadic green tile graph resembling Morse code for "help me", punctuated by 4-week dry spells where you probably reconsidered your entire engineering career.`;
+      }
+
+      // 4. Tech Stack Roast
+      let stackRoast = "";
+      if (topLang.includes("Java") && !topLang.includes("Script")) {
+        stackRoast = `Dominant language is Java. You probably require 14 abstract factory interfaces and an XML configuration file just to write a "Hello World" console log.`;
+      } else if (topLang.includes("Python")) {
+        stackRoast = `Heavy Python user. 80% of your repositories are unpinned Jupyter notebooks titled "Untitled12.ipynb" full of memory leaks and unhandled torch exceptions.`;
+      } else if (topLang.includes("Rust")) {
+        stackRoast = `Writing Rust. You spent three weeks fighting the borrow checker just to build a command-line tool that cat's a text file, and you haven't stopped tweeting about memory safety since.`;
+      } else if (topLang.includes("TypeScript") || topLang.includes("JavaScript")) {
+        stackRoast = `A node_modules folder heavy enough to generate its own gravitational field. 370 npm packages imported just to pad a string or check if an integer is odd.`;
+      } else {
+        stackRoast = `A bizarre cocktail of repos featuring ${topLang}. Half of them are forks of libraries you thought you'd contribute to before realizing you had to read someone else's clean code.`;
+      }
+
+      // 5. Bio vs Reality Roast
+      let bioRoast = "";
+      if (bio.length > 0) {
+        bioRoast = `Bio ambitiously states: "${bio}". Yet your repositories display 0 merged pull requests, three half-baked clones of HackerNews, and a README that consists solely of a broken Shields.io build badge.`;
+      } else {
+        bioRoast = `No profile bio. Probably because articulating the architectural horrors lurking inside your public repositories would trigger an automated terms-of-service warning.`;
+      }
+
+      // 6. Dishonor Badges
+      const allBadges = [
+        { icon: "🚩", title: "Commit: 'fixed stuff'", desc: "Pushed 43 files with zero explanation" },
+        { icon: "💀", title: "README > Codebase", desc: "Wrote 800 words of docs for 20 lines of code" },
+        { icon: "📦", title: "Checked in .env once", desc: "API keys donated to Russian crypto miners" },
+        { icon: "👻", title: "Ghost Town Repos", desc: "Last active commit dated back to prehistoric eras" },
+        { icon: "🚨", title: "Main Branch Menace", desc: "PRs are for cowards who test their logic" },
+        { icon: "🪦", title: "14 Starred Frameworks", desc: "Will never actually read or clone any of them" },
+        { icon: "🤡", title: "Copy-Paste Virtuoso", desc: "Single-handedly keeping StackOverflow servers warm" },
+        { icon: "🌀", title: "Tutorial Loophole", desc: "10th attempt at building a Markdown blog" }
+      ];
+
+      // Shuffle badges deterministically
+      const selectedBadges = [
+        allBadges[(Math.abs(username.charCodeAt(0) || 1)) % allBadges.length],
+        allBadges[(Math.abs(username.charCodeAt(1) || 2) + 2) % allBadges.length],
+        allBadges[(Math.abs(username.charCodeAt(2) || 3) + 4) % allBadges.length],
+        allBadges[(Math.abs(username.length || 4) + 6) % allBadges.length]
+      ];
+
+      // 7. Backhanded Compliment
+      const compliments = [
+        `"At least your .gitignore is properly configured. Too bad nobody is ever going to clone this to find out."`,
+        `"On the bright side, your variable names are so cryptic that your code is accidentally quantum-encrypted."`,
+        `"You have great taste in GitHub dark mode theme, even if your repository architecture looks like an abandoned carnival."`,
+        `"Your ability to ignore failing GitHub Action workflows shows commendable emotional resilience."`,
+        `"At least your code is 100% bug-free in production, strictly because you've never managed to successfully deploy it."`
+      ];
+      const compliment = pickByHash(compliments, username, accountYears);
+
+      // Ego Annihilation score
+      let damageScore = 88;
+      if (mode === 'nuclear') damageScore = 96 + (Math.abs(username.charCodeAt(0) || 5) % 4);
+      else if (mode === 'mild') damageScore = 72 + (Math.abs(username.charCodeAt(0) || 3) % 15);
+      else damageScore = 89 + (Math.abs(username.charCodeAt(0) || 4) % 10);
+
+      return {
+        user,
+        repos,
+        archetype,
+        headline,
+        commitsRoast,
+        stackRoast,
+        bioRoast,
+        compliment,
+        badges: selectedBadges,
+        damageScore
+      };
+    }
+
+    // UI Elements
+    const roastForm = document.getElementById('roast-form');
+    const usernameInput = document.getElementById('username-input');
+    const roastModeSelect = document.getElementById('roast-mode');
+    const roastBtn = document.getElementById('roast-btn');
+    const terminalSection = document.getElementById('terminal-section');
+    const terminalLogs = document.getElementById('terminal-logs');
+    const terminalActiveStep = document.getElementById('terminal-active-step');
+    const terminalProgressBar = document.getElementById('terminal-progress-bar');
+    const skipTerminalBtn = document.getElementById('skip-terminal-btn');
+    const roastResultSection = document.getElementById('roast-result-section');
+    const copyRoastBtn = document.getElementById('copy-roast-btn');
+    const copyBtnText = document.getElementById('copy-btn-text');
+    const shareXLink = document.getElementById('share-x-link');
+    const printCardBtn = document.getElementById('print-card-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+
+    // Show Toast
+    function showToast(msg) {
+      toastMessage.textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3000);
+    }
+
+    // Quick user pill clicks
+    document.querySelectorAll('.quick-user-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const u = btn.getAttribute('data-user');
+        usernameInput.value = u;
+        sound.playClick();
+        triggerRoastFlow(u);
+      });
+    });
+
+    // Form submit
+    roastForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = usernameInput.value.trim().replace(/^@/, '');
+      if (!username) return;
+      sound.playClick();
+      triggerRoastFlow(username);
+    });
+
+    // Reset button
+    resetBtn.addEventListener('click', () => {
+      sound.playClick();
+      roastResultSection.classList.add('hidden');
+      terminalSection.classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      usernameInput.focus();
+    });
+
+    // Fast-Forward skip terminal
+    let skipRequested = false;
+    skipTerminalBtn.addEventListener('click', () => {
+      skipRequested = true;
+      sound.playClick();
+      terminalProgressBar.style.width = '100%';
+    });
+
+    // Fetch and Run Roast
+    async function triggerRoastFlow(username) {
+      skipRequested = false;
+      const mode = roastModeSelect.value;
+      
+      // UI State
+      roastBtn.disabled = true;
+      roastBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      roastResultSection.classList.add('hidden');
+      terminalSection.classList.remove('hidden');
+      terminalLogs.innerHTML = '';
+      terminalProgressBar.style.width = '10%';
+
+      // Scroll to terminal
+      terminalSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Hacker Terminal Log steps
+      const steps = [
+        { text: `Locating suspect: @${username} on GitHub...`, pct: 25 },
+        { text: `Auditing commit hygiene & 3 AM panic pushes...`, pct: 45 },
+        { text: `Calculating node_modules bloat & unhandled exceptions...`, pct: 65 },
+        { text: `Scanning abandoned portfolio redesigns & empty READMEs...`, pct: 85 },
+        { text: `Synthesizing maximum emotional damage report...`, pct: 100 }
+      ];
+
+      // Start background fetch immediately
+      const fetchPromise = fetchUserData(username);
+
+      // Terminal animated typing loop
+      for (let i = 0; i < steps.length; i++) {
+        if (skipRequested) break;
+        const step = steps[i];
+        terminalActiveStep.textContent = step.text;
+        terminalProgressBar.style.width = `${step.pct}%`;
+        sound.playTerminalBeep();
+
+        const logLine = document.createElement('div');
+        logLine.className = 'flex items-center gap-2 text-zinc-400';
+        logLine.innerHTML = `<span class="text-zinc-600 font-mono">[${new Date().toLocaleTimeString()}]</span> <span class="text-green-400 font-bold">✓</span> <span>${step.text}</span>`;
+        terminalLogs.appendChild(logLine);
+
+        await new Promise(r => setTimeout(r, 450));
+      }
+
+      const { user, repos } = await fetchPromise;
+      const roast = synthesizeRoast(user, repos, mode);
+      currentRoastData = roast;
+
+      sound.playBurnSizzle();
+
+      // Render into card
+      renderRoastCard(roast);
+
+      // Hide terminal, show result
+      setTimeout(() => {
+        terminalSection.classList.add('hidden');
+        roastResultSection.classList.remove('hidden');
+        roastBtn.disabled = false;
+        roastBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        roastResultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        lucide.createIcons();
+      }, skipRequested ? 50 : 350);
+    }
+
+    // GitHub Public API fetcher with graceful mock fallback
+    async function fetchUserData(username) {
+      try {
+        const userRes = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
+        
+        if (!userRes.ok) {
+          // Rate-limited (403) or not found (404) -> Fall back gracefully to procedural profile
+          console.warn(`GitHub API returned ${userRes.status}, falling back to heuristic procedural profile.`);
+          return generateFallbackProfile(username);
+        }
+
+        const userData = await userRes.json();
+        
+        let repoData = [];
+        try {
+          const repoRes = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}/repos?sort=updated&per_page=15`);
+          if (repoRes.ok) {
+            repoData = await repoRes.json();
+          }
+        } catch (e) {
+          console.warn("Could not fetch repo list, using empty set.", e);
+        }
+
+        return { user: userData, repos: Array.isArray(repoData) ? repoData : [] };
+      } catch (err) {
+        console.warn("Network error reaching GitHub, deploying procedural heuristic profile.", err);
+        return generateFallbackProfile(username);
+      }
+    }
+
+    // Procedural Fallback when GitHub API is 403 or offline
+    function generateFallbackProfile(username) {
+      const isPreset = PRESETS[username.toLowerCase()];
+      const mockYears = 2 + (Math.abs(username.charCodeAt(0) || 3) % 8);
+      const mockRepos = 6 + (Math.abs(username.charCodeAt(1) || 5) % 35);
+      const mockFollowers = 12 + (Math.abs(username.charCodeAt(2) || 7) % 400);
+
+      return {
+        user: {
+          login: username,
+          name: isPreset ? username.toUpperCase() : `${username.charAt(0).toUpperCase() + username.slice(1)} (Unverified)`,
+          avatar_url: `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(username)}`,
+          bio: "Self-proclaimed tech architect. Pushes code that breaks production at 4 PM on Fridays.",
+          public_repos: mockRepos,
+          followers: mockFollowers,
+          following: 8,
+          created_at: `${2026 - mockYears}-04-12T00:00:00Z`,
+          html_url: `https://github.com/${username}`
+        },
+        repos: [
+          { name: "portfolio-v4-final-abandoned", language: "TypeScript", stargazers_count: 0, pushed_at: "2025-11-01" },
+          { name: "react-todo-omega", language: "JavaScript", stargazers_count: 1, pushed_at: "2025-08-15" },
+          { name: "crypto-ai-arbitrage-bot", language: "Python", stargazers_count: 0, pushed_at: "2024-03-20" }
+        ]
+      };
+    }
+
+    // Render Roast Card into DOM
+    function renderRoastCard(roast) {
+      const u = roast.user;
+      
+      // Avatar with fallback
+      const avatarEl = document.getElementById('card-avatar');
+      avatarEl.src = u.avatar_url || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(u.login)}`;
+      avatarEl.onerror = () => {
+        avatarEl.src = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(u.login)}`;
+      };
+
+      // Header fields
+      document.getElementById('card-name').textContent = u.name || u.login;
+      const usernameLink = document.getElementById('card-username-link');
+      usernameLink.textContent = `@${u.login}`;
+      usernameLink.href = u.html_url || `https://github.com/${u.login}`;
+
+      document.getElementById('card-bio').textContent = u.bio || "No bio provided. The commits speak loud enough.";
+
+      // Stats
+      const repoCount = u.public_repos !== undefined ? u.public_repos : (roast.repos.length || 0);
+      const followerCount = u.followers !== undefined ? (u.followers >= 1000 ? `${(u.followers/1000).toFixed(1)}k` : u.followers) : 0;
+      const joinYear = new Date(u.created_at || '2022-01-01').getFullYear();
+      const yrs = Math.max(1, new Date().getFullYear() - joinYear);
+
+      document.getElementById('card-stat-repos').textContent = `📦 ${repoCount} repos`;
+      document.getElementById('card-stat-followers').textContent = `👥 ${followerCount} followers`;
+      document.getElementById('card-stat-age').textContent = `⏳ ${yrs} yrs on Git`;
+
+      // Archetype & Damage
+      document.getElementById('card-archetype').textContent = roast.archetype;
+      document.getElementById('roast-damage-badge').textContent = `🔥 Ego Annihilated: ${roast.damageScore}%`;
+
+      // Roast Paragraphs
+      document.getElementById('card-roast-headline').textContent = `"${roast.headline}"`;
+      document.getElementById('card-roast-commits').textContent = roast.commitsRoast;
+      document.getElementById('card-roast-stack').textContent = roast.stackRoast;
+      document.getElementById('card-roast-bio').textContent = roast.bioRoast;
+      document.getElementById('card-compliment').textContent = roast.compliment;
+
+      // Badges Grid
+      const badgesContainer = document.getElementById('card-badges-grid');
+      badgesContainer.innerHTML = '';
+      roast.badges.forEach(b => {
+        const badgeEl = document.createElement('div');
+        badgeEl.className = 'p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 flex flex-col justify-between';
+        badgeEl.innerHTML = `
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="text-base">${b.icon}</span>
+            <span class="text-xs font-mono font-bold text-zinc-200 truncate">${b.title}</span>
+          </div>
+          <p class="text-[11px] text-zinc-400 font-sans leading-tight line-clamp-2">${b.desc}</p>
+        `;
+        badgesContainer.appendChild(badgeEl);
+      });
+
+      // Timestamp
+      document.getElementById('card-timestamp').textContent = `Timestamp: ${new Date().toISOString().split('T')[0]}`;
+
+      // Twitter / X intent share link
+      const tweetText = `My GitHub profile (@${u.login}) was just brutally roasted by GitRoast!\n\nDiagnosed Archetype: ${roast.archetype}\nEgo Annihilation: ${roast.damageScore}%\n"${roast.headline}"\n\nRoast yours at GitRoast:`;
+      shareXLink.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+    }
+
+    // Copy Roast to Clipboard
+    copyRoastBtn.addEventListener('click', async () => {
+      if (!currentRoastData) return;
+      sound.playClick();
+      const r = currentRoastData;
+      const text = `🔥 GitRoast Verdict for @${r.user.login} 🔥
+Archetype: ${r.archetype}
+Ego Annihilation: ${r.damageScore}%
+
+"${r.headline}"
+
+• Commit Hygiene: ${r.commitsRoast}
+• Tech Stack: ${r.stackRoast}
+• Bio Reality: ${r.bioRoast}
+
+Dishonor Badges:
+${r.badges.map(b => `${b.icon} ${b.title} - ${b.desc}`).join('\n')}
+
+Silver Lining:
+${r.compliment}
+
+Roasted at GitRoast.dev`;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        copyBtnText.textContent = 'Copied!';
+        showToast('🔥 Brutal roast copied to clipboard!');
+        setTimeout(() => {
+          copyBtnText.textContent = 'Copy Roast';
+        }, 2000);
+      } catch (err) {
+        showToast('Could not copy to clipboard.');
+      }
+    });
+
+    // Print / Save Card
+    printCardBtn.addEventListener('click', () => {
+      sound.playClick();
+      window.print();
+    });
+
+    // Initial Lucide Render
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
