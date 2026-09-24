@@ -292,6 +292,33 @@
       box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.2);
     }
 
+    /* Spaghetti Stars Rating System */
+    @keyframes star-pop {
+      0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+      70% { transform: scale(1.3) rotate(8deg); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .spaghetti-star {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .spaghetti-star.active {
+      color: #f59e0b;
+      filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.7)) drop-shadow(0 0 16px rgba(239, 68, 68, 0.4));
+      animation: star-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+    .spaghetti-star.inactive {
+      color: #3f3f46;
+      opacity: 0.4;
+    }
+    .spaghetti-rating-badge {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(239, 68, 68, 0.15));
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.1);
+    }
+
     /* Cyberpunk HUD Corner Markers */
     .hud-corner-tl::before {
       content: '';
@@ -596,12 +623,36 @@
             </div>
           </div>
 
-          <!-- Devastating Roast Headline (Stagger 2) -->
+          <!-- Devastating Roast Headline & Spaghetti Stars (Stagger 2) -->
           <div id="card-headline-row" class="stagger-item space-y-2">
-            <span class="text-[11px] font-mono uppercase tracking-wider text-red-400 font-bold flex items-center gap-1.5">
-              <i data-lucide="skull" class="w-3.5 h-3.5"></i>
-              Executive Roast Summary
-            </span>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-[11px] font-mono uppercase tracking-wider text-red-400 font-bold flex items-center gap-1.5">
+                <i data-lucide="skull" class="w-3.5 h-3.5"></i>
+                Executive Roast Summary
+              </span>
+
+              <!-- Visual Spaghetti Stars System -->
+              <div id="spaghetti-stars-container" class="flex items-center gap-2 px-3 py-1.5 rounded-lg spaghetti-rating-badge" title="Spaghetti Code Rating (1-5 Stars)">
+                <span class="text-[10px] font-mono uppercase tracking-wider text-amber-300 font-semibold flex items-center gap-1">
+                  <span>🍝</span> Spaghetti Rating:
+                </span>
+                <div id="spaghetti-stars-list" class="flex items-center gap-1 text-sm">
+                  <!-- Injected via JavaScript -->
+                  <span class="spaghetti-star">⭐</span>
+                  <span class="spaghetti-star">⭐</span>
+                  <span class="spaghetti-star">⭐</span>
+                  <span class="spaghetti-star">⭐</span>
+                  <span class="spaghetti-star">⭐</span>
+                </div>
+                <span id="spaghetti-stars-label" class="text-xs font-mono font-bold text-amber-400 ml-1">
+                  5/5
+                </span>
+                <span id="spaghetti-stars-desc" class="hidden sm:inline text-[10px] font-mono text-amber-200/80 italic border-l border-amber-500/30 pl-2">
+                  Atomic Carbonara Disaster
+                </span>
+              </div>
+            </div>
+
             <h3 id="card-roast-headline" class="text-xl sm:text-2xl font-black text-white leading-snug tracking-tight">
               "12 Repositories, 0 Stars, and 4 Abandoned Portfolio Redesigns"
             </h3>
@@ -1361,6 +1412,39 @@
       };
     }
 
+    // Helper: Compute Spaghetti Stars (1-5) and comical label based on damage score
+    function getSpaghettiRating(damageScore) {
+      const score = Math.max(1, Math.min(100, Number(damageScore) || 50));
+      let stars = 1;
+      let label = '1/5';
+      let title = 'Al Dente Apprentice';
+      let desc = 'Minimal tangled logic, mostly undercooked scripts.';
+
+      if (score >= 90) {
+        stars = 5;
+        label = '5/5';
+        title = 'Nuclear Carbonara Calamity';
+        desc = 'Unrecoverable cosmic mess of nested callbacks & debt.';
+      } else if (score >= 75) {
+        stars = 4;
+        label = '4/5';
+        title = 'Overcooked Rigatoni Heap';
+        desc = 'Boiling chaotic dependencies held by prayer.';
+      } else if (score >= 55) {
+        stars = 3;
+        label = '3/5';
+        title = 'Tangled Tagliatelle Trap';
+        desc = 'Mild structural integrity with deep hidden bugs.';
+      } else if (score >= 35) {
+        stars = 2;
+        label = '2/5';
+        title = 'Limp Fettuccine Prototype';
+        desc = 'A few sketchy hacks, but salvageable with a refactor.';
+      }
+
+      return { stars, label, title, desc };
+    }
+
     // Render Roast Card into DOM
     function renderRoastCard(roast) {
       const u = roast.user;
@@ -1395,6 +1479,27 @@
       const egoScoreEl = document.getElementById('ego-score-value');
       if (egoScoreEl) egoScoreEl.textContent = '0';
 
+      // Spaghetti Stars Rating (1 - 5 stars)
+      const spaghetti = getSpaghettiRating(roast.damageScore);
+      roast.spaghettiRating = spaghetti; // cache for export & sharing
+      const starsListEl = document.getElementById('spaghetti-stars-list');
+      const starsLabelEl = document.getElementById('spaghetti-stars-label');
+      const starsDescEl = document.getElementById('spaghetti-stars-desc');
+
+      if (starsListEl) {
+        starsListEl.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+          const starSpan = document.createElement('span');
+          starSpan.className = `spaghetti-star text-base select-none ${i <= spaghetti.stars ? 'active' : 'inactive'}`;
+          starSpan.style.animationDelay = `${i * 90}ms`;
+          starSpan.textContent = '⭐';
+          starSpan.setAttribute('aria-hidden', 'true');
+          starsListEl.appendChild(starSpan);
+        }
+      }
+      if (starsLabelEl) starsLabelEl.textContent = `${spaghetti.stars}/5`;
+      if (starsDescEl) starsDescEl.textContent = spaghetti.title;
+
       // Roast Paragraphs
       document.getElementById('card-roast-headline').textContent = `"${roast.headline}"`;
       document.getElementById('card-roast-commits').textContent = roast.commitsRoast;
@@ -1421,8 +1526,9 @@
       // Timestamp
       document.getElementById('card-timestamp').textContent = `Timestamp: ${new Date().toISOString().split('T')[0]}`;
 
-      // Twitter / X intent share link
-      const tweetText = `My GitHub profile (@${u.login}) was just brutally roasted by GitRoast!\n\nDiagnosed Archetype: ${roast.archetype}\nEgo Annihilation: ${roast.damageScore}%\n"${roast.headline}"\n\nRoast yours at GitRoast:`;
+      // Twitter / X intent share link with Spaghetti rating
+      const starsEmoji = '⭐'.repeat(spaghetti.stars);
+      const tweetText = `My GitHub profile (@${u.login}) was just brutally roasted by GitHub Shame Engine!\n\n🍝 Spaghetti Rating: ${starsEmoji} (${spaghetti.stars}/5 - ${spaghetti.title})\n🎭 Diagnosed Archetype: ${roast.archetype}\n💥 Ego Annihilation: ${roast.damageScore}%\n"${roast.headline}"\n\nRoast yours at:`;
       shareXLink.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
     }
 
@@ -1475,7 +1581,10 @@
       if (!currentRoastData) return;
       sound.playClick();
       const r = currentRoastData;
-      const text = `🔥 GitRoast Verdict for @${r.user.login} 🔥
+      const sp = r.spaghettiRating || getSpaghettiRating(r.damageScore);
+      const starsEmoji = '⭐'.repeat(sp.stars);
+      const text = `🔥 GitHub Shame Engine Verdict for @${r.user.login} 🔥
+🍝 Spaghetti Rating: ${starsEmoji} (${sp.stars}/5 - ${sp.title})
 Archetype: ${r.archetype}
 Ego Annihilation: ${r.damageScore}%
 
@@ -1491,7 +1600,7 @@ ${r.badges.map(b => `${b.icon} ${b.title} - ${b.desc}`).join('\n')}
 Silver Lining:
 ${r.compliment}
 
-Roasted at GitRoast.dev`;
+Roasted at github-shame-engine.vercel.app`;
 
       try {
         await navigator.clipboard.writeText(text);
@@ -1782,10 +1891,19 @@ Roasted at GitRoast.dev`;
         ctx.lineTo(cardX + cardW - 32, cardY + 130);
         ctx.stroke();
 
-        // 8. Executive Roast Summary Headline
+        // 8. Executive Roast Summary Headline & Spaghetti Rating
         ctx.font = 'bold 12px "SF Mono", Monaco, Consolas, monospace';
         ctx.fillStyle = '#ef4444';
         ctx.fillText(`☠️  EXECUTIVE ROAST SUMMARY  ·  EGO ANNIHILATED: ${r.damageScore}%`, cardX + 32, cardY + 146);
+
+        // Draw Spaghetti Rating Badge in Canvas Top Right of Section
+        const spRating = r.spaghettiRating || getSpaghettiRating(r.damageScore);
+        const spStarsText = '★'.repeat(spRating.stars) + '☆'.repeat(5 - spRating.stars);
+        ctx.textAlign = 'right';
+        ctx.font = 'bold 12px "SF Mono", Monaco, Consolas, monospace';
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillText(`🍝 SPAGHETTI RATING: ${spStarsText} (${spRating.stars}/5)`, cardX + cardW - 32, cardY + 146);
+        ctx.textAlign = 'left';
 
         ctx.font = 'bold 22px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
         ctx.fillStyle = '#ffffff';
@@ -2062,10 +2180,12 @@ Roasted at GitRoast.dev`;
                 <span class="font-bold text-white text-sm sm:text-base truncate group-hover:text-amber-300 transition-colors">${item.name || item.username}</span>
                 <span class="text-xs font-mono text-zinc-500 truncate">@${item.username}</span>
               </div>
-              <div class="flex items-center gap-2 mt-0.5 text-xs text-zinc-400">
+              <div class="flex items-center gap-2 mt-0.5 text-xs text-zinc-400 flex-wrap">
                 <span class="text-zinc-300 font-mono text-[11px] truncate">${item.archetype || 'Spaghetti Maestro'}</span>
                 <span>·</span>
                 <span class="text-red-400 font-mono text-[11px] shrink-0 font-bold">${item.damageScore || 90}% Annihilated</span>
+                <span>·</span>
+                <span class="text-amber-400 font-mono text-[11px] shrink-0" title="Spaghetti Rating">🍝 ${'⭐'.repeat(getSpaghettiRating(item.damageScore || 90).stars)}</span>
               </div>
             </div>
           </div>
