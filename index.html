@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <!-- Primary SEO Tags -->
 <title>GitHub Shame Engine | AI Code Roaster & Ego Destroyer</title>
 <meta name="title" content="GitHub Shame Engine | AI Code Roaster & Ego Destroyer">
@@ -372,6 +374,100 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #3f3f46;
     }
+    /* Real-Time Leaderboard Live Glow & Animations */
+    @keyframes leader-pulse-glow {
+      0% {
+        border-color: rgba(245, 158, 11, 0.95);
+        box-shadow: 0 0 25px rgba(245, 158, 11, 0.4), inset 0 0 15px rgba(239, 68, 68, 0.2);
+        transform: scale(1.015);
+      }
+      50% {
+        border-color: rgba(239, 68, 68, 0.9);
+        box-shadow: 0 0 35px rgba(239, 68, 68, 0.45), inset 0 0 20px rgba(245, 158, 11, 0.25);
+        transform: scale(1.02);
+      }
+      100% {
+        border-color: rgba(63, 63, 70, 0.8);
+        box-shadow: none;
+        transform: scale(1);
+      }
+    }
+    .leader-card-updated {
+      animation: leader-pulse-glow 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes rank-pop-badge {
+      0% { transform: scale(0.6); opacity: 0; }
+      70% { transform: scale(1.25); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .rank-change-anim {
+      animation: rank-pop-badge 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes feed-fade-in {
+      0% { opacity: 0; transform: translateY(-8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .feed-item-anim {
+      animation: feed-fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .live-pulse-dot {
+      position: relative;
+      display: inline-flex;
+      width: 8px;
+      height: 8px;
+    }
+    .live-pulse-dot .ping {
+      animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+      position: absolute;
+      display: inline-flex;
+      height: 100%;
+      width: 100%;
+      border-radius: 9999px;
+      background-color: #10b981;
+      opacity: 0.75;
+    }
+    .live-pulse-dot .core {
+      position: relative;
+      display: inline-flex;
+      border-radius: 9999px;
+      height: 8px;
+      width: 8px;
+      background-color: #10b981;
+    }
+    /* Real-Time Live Text Generation Pulse & Glow */
+    @keyframes realtime-flash {
+      0% {
+        color: #f87171;
+        text-shadow: 0 0 16px rgba(239, 68, 68, 0.7);
+        transform: scale(1.008);
+      }
+      50% {
+        color: #fbbf24;
+      }
+      100% {
+        color: inherit;
+        text-shadow: none;
+        transform: scale(1);
+      }
+    }
+    .realtime-text-flash {
+      animation: realtime-flash 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes badge-flash {
+      0% {
+        border-color: rgba(239, 68, 68, 0.9);
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        transform: scale(1.02);
+      }
+      100% {
+        border-color: rgba(39, 39, 42, 0.8);
+        box-shadow: none;
+        transform: scale(1);
+      }
+    }
+    .badge-flash-anim {
+      animation: badge-flash 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
   </style>
   <meta name="google-site-verification" content="q5jH8sIFbdo5BCSdzODMPJGCVaDGvPp12IcDjhgwkQI" />
 </head>
@@ -553,6 +649,12 @@
         </div>
 
         <div class="flex items-center gap-2">
+          <!-- Re-Roll / Re-Cook Real-Time Roast -->
+          <button id="reroll-roast-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-amber-500/50 hover:border-amber-400 text-xs font-mono text-amber-300 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm shadow-amber-950/40" title="Re-synthesize fresh roast in real-time with live repository & commit variations">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400 animate-pulse"></i>
+            <span id="reroll-btn-text">Re-Cook Roast</span>
+          </button>
+
           <!-- Copy Roast -->
           <button id="copy-roast-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-mono text-zinc-200 transition-colors cursor-pointer">
             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
@@ -626,10 +728,16 @@
           <!-- Devastating Roast Headline & Spaghetti Stars (Stagger 2) -->
           <div id="card-headline-row" class="stagger-item space-y-2">
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <span class="text-[11px] font-mono uppercase tracking-wider text-red-400 font-bold flex items-center gap-1.5">
-                <i data-lucide="skull" class="w-3.5 h-3.5"></i>
-                Executive Roast Summary
-              </span>
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-mono uppercase tracking-wider text-red-400 font-bold flex items-center gap-1.5">
+                  <i data-lucide="skull" class="w-3.5 h-3.5"></i>
+                  Executive Roast Summary
+                </span>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono bg-red-950/80 border border-red-500/40 text-red-300 font-normal">
+                  <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping"></span>
+                  REAL-TIME SYNTHESIS
+                </span>
+              </div>
 
               <!-- Visual Spaghetti Stars System -->
               <div id="spaghetti-stars-container" class="flex items-center gap-2 px-3 py-1.5 rounded-lg spaghetti-rating-badge" title="Spaghetti Code Rating (1-5 Stars)">
@@ -790,24 +898,157 @@
     <div class="max-w-4xl mx-auto space-y-8">
       
       <!-- Section Header -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-6">
+      <div class="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-4 border-b border-zinc-800/80 pb-6">
         <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 text-xs font-mono tracking-wide mb-3">
-            <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-400"></i>
-            Live Local Leaderboard
+          <div class="flex items-center gap-3 flex-wrap mb-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-mono tracking-wide">
+              <span class="live-pulse-dot">
+                <span class="ping"></span>
+                <span class="core"></span>
+              </span>
+              <span id="live-status-pill-text" class="font-bold">LIVE REAL-TIME SYNC</span>
+            </div>
+
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 text-xs font-mono">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+              <span>Next roast in: <strong id="next-tick-countdown" class="text-amber-300 font-bold tabular-nums">5s</strong></span>
+            </div>
           </div>
+
           <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2.5">
             Hall of <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-amber-500 to-orange-400">Flame</span>
           </h2>
           <p class="text-zinc-400 text-xs sm:text-sm mt-1 max-w-xl">
-            Top 5 most frequently targeted developers &amp; spaghetti code offenders, persisted via browser local storage.
+            Live-updating leaderboard of the most roasted GitHub developers worldwide. Offender ranks and spaghetti counts continuously fluctuate as users roast code in real time.
           </p>
         </div>
 
-        <div class="flex items-center gap-2">
-          <button id="reset-leaderboard-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-800 text-xs font-mono text-zinc-500 hover:text-red-400 hover:border-red-900/50 bg-zinc-900/60 transition-colors cursor-pointer" title="Reset leaderboard to default state">
+        <!-- Live Controls Toolbar -->
+        <div class="flex items-center gap-2 flex-wrap self-stretch sm:self-auto justify-start sm:justify-end">
+          <button id="trigger-live-roast-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-xs font-mono text-amber-300 transition-all cursor-pointer shadow-sm hover:shadow-amber-500/20" title="Simulate an immediate incoming live roast event">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>⚡ Trigger Live Roast</span>
+          </button>
+
+          <button id="toggle-live-sync-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-700 bg-zinc-900/80 text-xs font-mono text-zinc-300 transition-colors cursor-pointer" title="Pause or resume automatic real-time updates">
+            <i data-lucide="pause" id="live-toggle-icon" class="w-3.5 h-3.5 text-zinc-400"></i>
+            <span id="live-toggle-label">Pause Live</span>
+          </button>
+
+          <button id="reset-leaderboard-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-800 text-xs font-mono text-zinc-500 hover:text-red-400 hover:border-red-900/50 bg-zinc-900/60 transition-colors cursor-pointer" title="Reset leaderboard to baseline roster">
             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-            <span>Reset Leaderboard</span>
+            <span>Reset</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-Time Global Telemetry Metrics -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+        <div class="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800/80 space-y-1">
+          <div class="text-zinc-500 text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5">
+            <i data-lucide="globe" class="w-3 h-3 text-blue-400"></i>
+            <span>Total Roasts</span>
+          </div>
+          <div id="stat-total-roasts" class="text-base sm:text-lg font-black text-white tabular-nums">
+            15,482
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800/80 space-y-1">
+          <div class="text-zinc-500 text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5">
+            <i data-lucide="crown" class="w-3 h-3 text-amber-400"></i>
+            <span>#1 Reigning Target</span>
+          </div>
+          <div id="stat-top-victim" class="text-sm sm:text-base font-bold text-amber-400 truncate">
+            @torvalds
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800/80 space-y-1">
+          <div class="text-zinc-500 text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5">
+            <i data-lucide="flame" class="w-3 h-3 text-red-400"></i>
+            <span>Live Burn Rate</span>
+          </div>
+          <div id="stat-burn-rate" class="text-base sm:text-lg font-black text-red-400 tabular-nums">
+            ~18 / min
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800/80 space-y-1">
+          <div class="text-zinc-500 text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5">
+            <i data-lucide="activity" class="w-3 h-3 text-emerald-400"></i>
+            <span>Latest Shaming</span>
+          </div>
+          <div id="stat-last-roast" class="text-sm sm:text-base font-bold text-emerald-400 truncate">
+            Just now
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Activity Stream Ticker (Rolling Sizzles) -->
+      <div class="rounded-xl border border-zinc-800/90 bg-zinc-900/40 backdrop-blur-md overflow-hidden">
+        <div class="px-4 py-2.5 bg-zinc-900/80 border-b border-zinc-800/80 flex items-center justify-between gap-2 text-xs font-mono">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+            <span class="font-bold text-zinc-200">LIVE SIZZLE STREAM</span>
+            <span class="hidden sm:inline text-zinc-500">// Real-time roasts flowing in across the network</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="live-stream-count-badge" class="px-2 py-0.5 rounded bg-zinc-800 text-[11px] text-zinc-400 font-mono">
+              Auto-updating
+            </span>
+          </div>
+        </div>
+        <div id="live-activity-stream" class="p-3 space-y-2 max-h-36 overflow-y-auto font-mono text-xs divide-y divide-zinc-800/40">
+          <!-- Injected dynamically via JavaScript -->
+        </div>
+      </div>
+
+      <!-- Filter Tabs & Display Controls -->
+      <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pt-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="inline-flex rounded-lg bg-zinc-900/90 p-1 border border-zinc-800 gap-1 overflow-x-auto text-xs font-mono" id="leaderboard-tabs">
+            <button type="button" data-tab="top" class="leader-tab px-3 py-1.5 rounded-md bg-zinc-800 text-white font-bold transition-colors cursor-pointer whitespace-nowrap">
+              🔥 Top Offenders
+            </button>
+            <button type="button" data-tab="trending" class="leader-tab px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition-colors cursor-pointer whitespace-nowrap">
+              ⚡ Trending (Live)
+            </button>
+            <button type="button" data-tab="damage" class="leader-tab px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition-colors cursor-pointer whitespace-nowrap">
+              🍝 Spaghetti Damage
+            </button>
+            <button type="button" data-tab="recent" class="leader-tab px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition-colors cursor-pointer whitespace-nowrap">
+              🕒 Recent Sizzles
+            </button>
+            <button type="button" data-tab="intensity" id="tab-intensity" class="leader-tab px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition-colors cursor-pointer whitespace-nowrap flex items-center gap-1.5" title="Filter live feed & leaderboard by Intensity (Mild, Spicy, Nuclear)">
+              <span id="tab-intensity-icon">🔥</span>
+              <span>Intensity:</span>
+              <span id="tab-intensity-val" class="font-bold text-amber-400">Spicy</span>
+            </button>
+          </div>
+
+          <!-- Intensity Selector Buttons for Quick Toggling -->
+          <div id="intensity-toggle-group" class="inline-flex items-center bg-zinc-900/90 p-1 rounded-lg border border-zinc-800 gap-1 text-xs font-mono">
+            <span class="text-[11px] text-zinc-500 px-1 hidden sm:inline">Feed:</span>
+            <button type="button" data-intensity="mild" class="intensity-btn px-2.5 py-1 rounded text-zinc-400 hover:text-zinc-200 transition-all cursor-pointer flex items-center gap-1">
+              <span>🌶️</span>
+              <span>Mild</span>
+            </button>
+            <button type="button" data-intensity="spicy" class="intensity-btn px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40 transition-all cursor-pointer flex items-center gap-1">
+              <span>🔥</span>
+              <span>Spicy</span>
+            </button>
+            <button type="button" data-intensity="nuclear" class="intensity-btn px-2.5 py-1 rounded text-zinc-400 hover:text-zinc-200 transition-all cursor-pointer flex items-center gap-1">
+              <span>☢️</span>
+              <span>Nuclear</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 justify-end text-xs font-mono text-zinc-400 shrink-0">
+          <span class="hidden sm:inline">Showing:</span>
+          <button id="toggle-leaderboard-limit" class="px-2.5 py-1 rounded-md border border-zinc-800 bg-zinc-900/60 hover:border-zinc-700 text-zinc-300 transition-colors cursor-pointer">
+            Top 5 (Show 10)
           </button>
         </div>
       </div>
@@ -820,10 +1061,13 @@
       <!-- Hall of Flame Info Bar -->
       <div class="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-zinc-500">
         <div class="flex items-center gap-2">
-          <span class="inline-block w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-          <span>Rankings update automatically each time any username is searched.</span>
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Rankings update and re-order automatically in real-time every few seconds.</span>
         </div>
-        <span class="text-zinc-400 font-semibold">Persisted in localStorage: <span class="text-amber-400">gitroast_leaderboard</span></span>
+        <div class="flex items-center gap-2 text-zinc-400">
+          <span>Synced locally &amp; cross-tab:</span>
+          <span class="text-amber-400 font-semibold font-mono">gitroast_leaderboard</span>
+        </div>
       </div>
 
     </div>
@@ -961,227 +1205,481 @@
   <script>
     // State
     let currentRoastData = null;
+    let currentRawProfileData = null;
     let terminalTimeout = null;
 
-    // Famous users preset overrides (in case of rate-limiting or for high-octane accuracy)
-    const PRESETS = {
-      torvalds: {
-        archetype: "Kernel Dictator with anger issues",
-        headline: "Invented Git so he'd never have to speak to another human being",
-        commits: "Reviews pull requests by reducing junior developers to subatomic weeping particles in Linux kernel mailing lists.",
-        stack: "Believes anything invented after C (1972) is bloated hipster garbage. Still edits code via pure testosterone and raw email patches.",
-        bio: "Doesn't have a bio because his ego has its own dedicated NUMA node and kernel subsystem.",
-        compliment: "Literally powers 99.8% of global cloud infrastructure, but would still reject your PR for using tabs instead of spaces.",
-        badges: [
-          { icon: "⚠️", title: "C > Everything", desc: "Refuses to learn Rust out of spite" },
-          { icon: "📧", title: "Mailing List Tyrant", desc: "Emotional damage delivered via plain text" },
-          { icon: "🐧", title: "Penguin Overlord", desc: "Replaces your OS while you sleep" },
-          { icon: "🔥", title: "Zero Merge Conflicts", desc: "Because everyone else is afraid to commit" }
-        ]
-      },
-      shadcn: {
-        archetype: "The Copy-Paste Cartel Boss",
-        headline: "Convinced an entire generation of developers that ctrl+c, ctrl+v is a package manager",
-        commits: "Pushes 400 components directly into your src/components directory without apologizing for the node_modules inflation.",
-        stack: "Single-handedly keeping Radix UI, Tailwind CSS, and Lucide in business with immaculate neutral-900 border radii.",
-        bio: "Doesn't need an npm registry when millions of devs clone his components every Monday morning like digital hoarders.",
-        compliment: "Made 90% of Silicon Valley MVP dashboards look like an $80k design studio built them in 10 minutes.",
-        badges: [
-          { icon: "📋", title: "Zero Dependencies", desc: "Just 48 files dropped in your repo" },
-          { icon: "🎨", title: "Neutral-950 Worship", desc: "Banned colors from modern web apps" },
-          { icon: "⚡", title: "CLI Cult Leader", desc: "npx shadcn@latest add personality" },
-          { icon: "🕶️", title: "Minimalist Enigma", desc: "No profile picture, 100k disciples" }
-        ]
-      },
-      gaearon: {
-        archetype: "Hooks Philosophy Traumatizer",
-        headline: "Gave us Redux to solve state, then spent 5 years watching us suffer with useEffect dependencies",
-        commits: "Commit history contains more architectural paradigm shifts than the entire Roman Empire.",
-        stack: "Wrote Redux in a weekend to win a hackathon, accidentally created a decade of boilerplate existential misery.",
-        bio: "React core alumnus who went to work on Overreacted and then quietly stepped back to watch the world debate server components.",
-        compliment: "Revolutionized frontend state management before everyone else was still wrestling with jQuery selectors.",
-        badges: [
-          { icon: "🪝", title: "useEffect Loop Victim", desc: "Forgot array dependency once in 2018" },
-          { icon: "⚛️", title: "Redux Boogeyman", desc: "Spawned 10,000 action types" },
-          { icon: "☕", title: "Overreacted Author", desc: "Deep philosophical essays on closures" },
-          { icon: "🧘", title: "Retired From React", desc: "Watching RSC wars from a safe distance" }
-        ]
-      },
-      karpathy: {
-        archetype: "Raw CUDA Sorcerer & Vibe Prophet",
-        headline: "Can train a transformer from scratch in C faster than you can npm install axios",
-        commits: "Commits clean, pristine micrograd and nanoGPT repositories that make 20-person AI startup codebases look like kindergarten drawings.",
-        stack: "Pure PyTorch, raw C pointers, zero bloat, and whatever LLM fits inside an A100 VRAM buffer.",
-        bio: "Former Director of AI at Tesla and OpenAI founding team. Teaching millions how neural nets really tick while wearing a Rubik's cube shirt.",
-        compliment: "The only person on earth who can explain backpropagation so clearly that even your marketing manager almost understands it.",
-        badges: [
-          { icon: "🧠", title: "nanoGPT Overlord", desc: "Wrote GPT-2 in 300 lines of Python" },
-          { icon: "🚀", title: "CUDA Whisperer", desc: "Skips PyTorch when feeling athletic" },
-          { icon: "🤖", title: "Self-Driving Architect", desc: "Trained cars to navigate California" },
-          { icon: "🧩", title: "Pure Math Aura", desc: "Computes matrix dot products by hand" }
-        ]
-      }
-    };
-
-    // Helper: Pick random item from list based on seed
-    function pickByHash(list, str, offset = 0) {
-      let hash = offset;
-      for (let i = 0; i < str.length; i++) {
-        hash = (hash << 5) - hash + str.charCodeAt(i);
-        hash |= 0;
-      }
-      const index = Math.abs(hash) % list.length;
-      return list[index];
+    // Helper: Truncate string cleanly
+    function truncateText(str, maxLen = 30) {
+      if (!str) return '';
+      return str.length > maxLen ? str.slice(0, maxLen - 1) + '…' : str;
     }
 
-    // Dynamic Roast Synthesis Engine
-    function synthesizeRoast(user, repos, mode = 'spicy') {
-      const username = user.login.toLowerCase();
-      
-      // If we have a hand-crafted burn for this famous dev, use it with intensity adjustments
-      if (PRESETS[username]) {
-        const p = PRESETS[username];
-        return {
-          user,
-          repos,
-          archetype: p.archetype,
-          headline: p.headline,
-          commitsRoast: p.commits,
-          stackRoast: p.stack,
-          bioRoast: p.bio,
-          compliment: p.compliment,
-          badges: p.badges,
-          damageScore: mode === 'nuclear' ? 100 : (mode === 'spicy' ? 95 : 82)
-        };
+    // Helper: Language Icon Mapping
+    function getLanguageIcon(lang) {
+      if (!lang) return '💻';
+      const l = lang.toLowerCase();
+      if (l.includes('type') || l.includes('java')) return '⚛️';
+      if (l.includes('python')) return '🐍';
+      if (l.includes('rust')) return '🦀';
+      if (l.includes('go')) return '🐹';
+      if (l.includes('c++') || l.includes('c#') || l === 'c') return '⚙️';
+      if (l.includes('html') || l.includes('css')) return '🎨';
+      if (l.includes('php')) return '🐘';
+      if (l.includes('ruby')) return '💎';
+      if (l.includes('swift') || l.includes('kotlin')) return '📱';
+      return '💻';
+    }
+
+    // Dynamic Real-Time Roast Synthesis Engine
+    function synthesizeRoast(user, repos, mode = 'spicy', events = [], options = {}) {
+      const username = (user.login || 'developer').toLowerCase();
+      const salt = options.salt !== undefined ? options.salt : Math.random();
+
+      // Extract real live commits from GitHub events
+      const liveCommits = [];
+      let latestCommitBranch = 'main';
+      let latestCommitDate = null;
+      if (Array.isArray(events)) {
+        events.forEach(ev => {
+          if (ev.type === 'PushEvent' && ev.payload && Array.isArray(ev.payload.commits)) {
+            ev.payload.commits.forEach(c => {
+              if (c && c.message && c.message.trim()) {
+                const firstLine = c.message.trim().split('\n')[0].replace(/^["']|["']$/g, '').trim();
+                if (firstLine.length > 2 && firstLine.length <= 80 && !liveCommits.some(item => item.msg === firstLine)) {
+                  liveCommits.push({
+                    msg: firstLine,
+                    repo: ev.repo ? (ev.repo.name || '').split('/')[1] || ev.repo.name : '',
+                    date: ev.created_at
+                  });
+                }
+              }
+            });
+            if (!latestCommitDate && ev.created_at) {
+              latestCommitDate = ev.created_at;
+              latestCommitBranch = (ev.payload.ref || '').replace('refs/heads/', '') || 'main';
+            }
+          }
+        });
       }
 
-      // Analyze metrics
-      const repoCount = user.public_repos || repos.length || 0;
+      // Analyze user profile
+      const repoList = Array.isArray(repos) ? repos : [];
+      const repoCount = user.public_repos !== undefined ? user.public_repos : repoList.length;
       const followers = user.followers || 0;
       const following = user.following || 0;
       const bio = (user.bio || '').trim();
-      const accountYears = Math.max(1, new Date().getFullYear() - new Date(user.created_at || '2022-01-01').getFullYear());
+      const company = (user.company || '').trim().replace(/^@/, '');
+      const location = (user.location || '').trim();
+      const blog = (user.blog || '').trim();
+      const joinYear = new Date(user.created_at || '2022-01-01').getFullYear();
+      const accountYears = Math.max(1, new Date().getFullYear() - joinYear);
 
-      // Language frequency analysis
-      const langCounts = {};
+      // Sort and profile repositories
+      const sortedByStars = [...repoList].sort((a,b) => (b.stargazers_count || 0) - (a.stargazers_count || 0));
+      const sortedByPushed = [...repoList].filter(r => r.pushed_at).sort((a,b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+      const sortedByAge = [...repoList].filter(r => r.created_at).sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
+
+      const topRepo = sortedByStars[0] || (repoList[0] || { name: 'repo-1', stargazers_count: 0, default_branch: 'main' });
+      const latestRepo = sortedByPushed[0] || topRepo;
+      const oldestRepo = sortedByAge[0] || topRepo;
+      const otherRepos = repoList.filter(r => r.name !== topRepo.name && r.name !== latestRepo.name);
+      const sampleRepo = otherRepos[0] || latestRepo;
+
       let totalStars = 0;
       let totalForks = 0;
-      let lastPushDaysAgo = 999;
+      let totalOpenIssues = 0;
+      let forkCount = 0;
+      let zeroStarCount = 0;
+      let unmaintainedCount = 0;
+      let noLicenseCount = 0;
+      const langCounts = {};
+      const nowTime = Date.now();
 
-      repos.forEach(repo => {
-        if (repo.language) {
-          langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
+      repoList.forEach(r => {
+        const stars = r.stargazers_count || 0;
+        totalStars += stars;
+        totalForks += (r.forks_count || 0);
+        totalOpenIssues += (r.open_issues_count || 0);
+        if (r.fork) forkCount++;
+        if (stars === 0) zeroStarCount++;
+        if (!r.license) noLicenseCount++;
+        if (r.pushed_at) {
+          const days = Math.round((nowTime - new Date(r.pushed_at)) / (1000 * 60 * 60 * 24));
+          if (days > 120) unmaintainedCount++;
         }
-        totalStars += (repo.stargazers_count || 0);
-        totalForks += (repo.forks_count || 0);
-        if (repo.pushed_at) {
-          const days = Math.round((new Date() - new Date(repo.pushed_at)) / (1000 * 60 * 60 * 24));
-          if (days < lastPushDaysAgo) lastPushDaysAgo = days;
+        if (r.language) {
+          langCounts[r.language] = (langCounts[r.language] || 0) + 1;
         }
       });
 
-      const topLang = Object.keys(langCounts).sort((a,b) => langCounts[b] - langCounts[a])[0] || "JavaScript";
+      const totalLangsCount = Object.values(langCounts).reduce((a, b) => a + b, 0) || 1;
+      const langEntries = Object.entries(langCounts).sort((a,b) => b[1] - a[1]);
+      const langStats = langEntries.map(([name, count]) => ({
+        name,
+        pct: Math.round((count / totalLangsCount) * 100)
+      }));
+      const topLang = langStats[0] ? langStats[0].name : "JavaScript";
+      const secondLang = langStats[1] ? langStats[1].name : null;
+      const langBreakdown = langStats.slice(0, 3).map(l => `${l.name} (${l.pct}%)`).join(', ') || topLang;
 
-      // 1. Archetype generation
-      const archetypes = [
-        "Tutorial Hell Veteran",
-        "Framework Hopper with 0 Deploys",
-        "Vibe Coder with 0 Commits",
-        "npm i everything Specialist",
-        "Senior Documentation Procrastinator",
+      // Detect frameworks/technologies from repo names, descriptions, topics
+      const frameworkKeywords = ['react', 'next', 'vue', 'angular', 'svelte', 'tailwind', 'vite', 'express', 'nest', 'django', 'flask', 'fastapi', 'pytorch', 'tensorflow', 'docker', 'rust', 'golang', 'flutter', 'spring', 'graphql', 'supabase', 'firebase', 'solidity', 'electron'];
+      const detectedFrameworks = [];
+      repoList.forEach(r => {
+        const text = `${r.name || ''} ${r.description || ''} ${(r.topics || []).join(' ')}`.toLowerCase();
+        frameworkKeywords.forEach(kw => {
+          if (text.includes(kw)) {
+            const displayKw = kw.charAt(0).toUpperCase() + kw.slice(1);
+            if (!detectedFrameworks.includes(displayKw)) detectedFrameworks.push(displayKw);
+          }
+        });
+      });
+
+      let daysSinceLastPush = 999;
+      if (latestRepo && latestRepo.pushed_at) {
+        daysSinceLastPush = Math.max(0, Math.round((nowTime - new Date(latestRepo.pushed_at)) / (1000 * 60 * 60 * 24)));
+      }
+
+      // Check if famous preset dev with rich live adaptation
+      if (username === 'torvalds') {
+        const torvaldsHeadlines = [
+          `Invented Git in 2 weeks so he'd never have to speak to another human being again`,
+          `Managing Linux with ${totalStars} stars while rejecting pull requests with surgical cruelty`,
+          `Still edits code via raw email patches and pure testosterone since 1991`
+        ];
+        return {
+          user, repos: repoList, events,
+          archetype: "Kernel Dictator & Email Terrorist",
+          headline: torvaldsHeadlines[Math.floor(salt * torvaldsHeadlines.length)],
+          commitsRoast: `Reviews Linux kernel pull requests by reducing junior developers into subatomic weeping particles. Pushes directly to Linus's tree with commit discipline that terrifies entire Fortune 500 operating system teams.`,
+          stackRoast: `Believes anything invented after C (1972) is bloated hipster trash. Refuses to learn modern package managers out of pure Finnish spite while powering 99.8% of global internet servers.`,
+          bioRoast: `Does not require a GitHub bio because his ego has its own dedicated NUMA memory node and uninterruptible power supply.`,
+          compliment: `Literally wrote the operating system running the server you are using right now, but would still verbally eviscerate you for using spaces instead of tabs.`,
+          badges: [
+            { icon: "⚠️", title: "C > Everything", desc: "Refuses modern frameworks out of principle" },
+            { icon: "📧", title: "Mailing List Tyrant", desc: "Emotional damage delivered via plain text" },
+            { icon: "🐧", title: "Penguin Overlord", desc: "Replaced global infrastructure before lunch" },
+            { icon: "🔥", title: "Zero Merge Conflicts", desc: "Because everyone else is terrified to push" }
+          ],
+          damageScore: 98
+        };
+      } else if (username === 'shadcn') {
+        const shadcnHeadlines = [
+          `Convinced an entire generation of developers that ctrl+c, ctrl+v is a package manager`,
+          `Single-handedly abolished colorful UI designs from the software industry`,
+          `Has ${followers} disciples copying neutral-950 border-radius CSS every Monday morning`
+        ];
+        return {
+          user, repos: repoList, events,
+          archetype: "The Copy-Paste Cartel Kingpin",
+          headline: shadcnHeadlines[Math.floor(salt * shadcnHeadlines.length)],
+          commitsRoast: `Pushes 400 components directly into your src/components directory without apologizing for the node_modules inflation or the mental fatigue of managing 35 Radix UI primitives.`,
+          stackRoast: `Tailwind CSS maximalist. Keeping Lucide, Radix, and Tailwind in business with immaculate monochrome border colors and invisible micro-interactions.`,
+          bioRoast: `No profile picture, no bio, 100k disciples. Built an open-source design empire purely on anonymous vibes and pristine README screenshots.`,
+          compliment: `Made 90% of Silicon Valley MVP dashboards look like an $80k design studio built them in 15 minutes.`,
+          badges: [
+            { icon: "📋", title: "Zero Dependencies", desc: "Just 48 files dropped in your repo" },
+            { icon: "🎨", title: "Neutral-950 Worship", desc: "Banned color palettes from modern SaaS" },
+            { icon: "⚡", title: "CLI Cult Leader", desc: "npx shadcn@latest add personality" },
+            { icon: "🕶️", title: "Minimalist Enigma", desc: "No avatar, 100k disciples" }
+          ],
+          damageScore: 95
+        };
+      }
+
+      // ==========================================
+      // 1. DYNAMIC REAL-TIME ARCHETYPE
+      // ==========================================
+      const archetypePool = [];
+      if (liveCommits.length > 0) archetypePool.push("Production Main Branch Menace");
+      if (zeroStarCount >= 3 && zeroStarCount === repoCount) archetypePool.push("Zero-Star Open Source Philanthropist");
+      if (forkCount >= 3) archetypePool.push("Serial Fork Hoarder");
+      if (daysSinceLastPush > 90) archetypePool.push("Zombie Repo Archivist");
+      if (detectedFrameworks.length >= 3) archetypePool.push("Framework Hopper with 0 Deploys");
+      if (topLang.includes('Type') || topLang.includes('Java')) archetypePool.push("node_modules Gravitational Hazard");
+      if (topLang.includes('Python')) archetypePool.push("Loose Notebook Script Alchemist");
+      if (topLang.includes('Rust') || topLang.includes('Go')) archetypePool.push("Systems Purist with 0 Users");
+      if (following > followers * 2 && following > 15) archetypePool.push("Asymmetric GitHub Lurker");
+      if (bio.length > 0 && bio.toLowerCase().includes('founder')) archetypePool.push("Stealth Founder with Broken CSS");
+      if (bio.length > 0 && bio.toLowerCase().includes('student')) archetypePool.push("Tutorial Hell Valedictorian");
+      archetypePool.push(
         "git push --force Addict",
-        "Tailwind CSS Maximalist",
-        "Full-Stack in Bio, HTML in Git",
-        "Dark Mode Terminal Overlord",
-        "Zombie Repo Hoarder",
-        "StackOverflow Copy-Paste Architect",
+        "Senior Documentation Procrastinator",
+        "Vibe Coder with 0 Tests",
+        "StackOverflow Copy-Paste Virtuoso",
         "Perpetual Portfolio Redesigner"
-      ];
-      const archetype = pickByHash(archetypes, username, repoCount);
+      );
+      const archetype = archetypePool[Math.floor(salt * archetypePool.length)];
 
-      // 2. Roast Headline
-      const headlines = [
-        `${repoCount} Repositories, ${totalStars} Stars, and 4 Abandoned Portfolio Redesigns`,
-        `Has ${followers} followers and none of them have ever dared clone your code`,
-        `Spends 4 hours configuring Neovim to write 6 lines of broken ${topLang}`,
-        `Your GitHub profile is a digital graveyard of unfinished Sunday afternoon epiphanies`,
-        `Committing directly to main since ${new Date(user.created_at || '2021').getFullYear()} like an absolute menace`,
-        `Writing code that even ChatGPT refuses to refactor without a safety warning`,
-        `More forks than the local diner, and not a single one has ever contributed a PR`
-      ];
-      const headline = pickByHash(headlines, username, followers + repoCount);
+      // ==========================================
+      // 2. DYNAMIC REAL-TIME HEADLINE (h3#card-roast-headline)
+      // ==========================================
+      const headlineCandidates = [];
 
-      // 3. Commits Roast based on mode
+      // A. If live commit messages spotted in real-time
+      if (liveCommits.length > 0) {
+        headlineCandidates.push(
+          `Latest live commit: "${liveCommits[0].msg}" — peak architecture from someone with ${followers} followers`,
+          `Pushed "${liveCommits[0].msg}" straight to branch '${latestCommitBranch}' like a dev who fears no compiler`,
+          `Spotted live in git logs: "${liveCommits[0].msg}" — the software equivalent of an unanswered 911 call`
+        );
+      }
+
+      // B. If flagship repo with stars
+      if (topRepo && topRepo.stargazers_count > 0) {
+        headlineCandidates.push(
+          `Flagship project '${topRepo.name}' holds ${topRepo.stargazers_count} stars while '${oldestRepo.name}' decays into geological strata`,
+          `'${topRepo.name}' is held together by ${topLang}, StackOverflow snippets, and sheer stubbornness`
+        );
+      }
+
+      // C. Zero-star repositories
+      if (zeroStarCount >= 2) {
+        headlineCandidates.push(
+          `${repoCount} repositories published into the GitHub abyss, ${zeroStarCount} with zero stars, and an ego that refuses to yield`,
+          `Maintaining ${zeroStarCount} zero-star repos with the fierce protective instincts of a dragon hoarding empty cardboard boxes`
+        );
+      }
+
+      // D. Fork collector
+      if (forkCount >= 2) {
+        headlineCandidates.push(
+          `${forkCount} of ${repoCount} repos are borrowed forks you cloned on a Sunday and abandoned before Monday morning`,
+          `More forks than the local diner, and not a single upstream pull request to show for it`
+        );
+      }
+
+      // E. Follower ratio
+      if (following > followers * 2 && following > 20) {
+        headlineCandidates.push(
+          `Following ${following} tech luminaries hoping senior engineering competence diffuses through GitHub osmosis`
+        );
+      }
+
+      // F. Framework addiction
+      if (detectedFrameworks.length > 0) {
+        headlineCandidates.push(
+          `Bundled ${detectedFrameworks[0]} and 400 node_modules for '${topRepo.name}' just to avoid writing 15 lines of raw ${topLang}`
+        );
+      }
+
+      // G. Tech stack & account age
+      headlineCandidates.push(
+        `${accountYears} years on GitHub writing ${topLang} with the architectural discipline of a startled cat`,
+        `Spends 4 hours configuring ${topLang} linters for '${latestRepo.name}' only to write 6 lines of broken logic`,
+        `Your GitHub profile is a digital graveyard of unfinished weekend epiphanies and unpinned dependencies`
+      );
+
+      const headline = headlineCandidates[Math.floor(salt * headlineCandidates.length)];
+
+      // ==========================================
+      // 3. DYNAMIC REAL-TIME COMMITS ROAST (p#card-roast-commits)
+      // ==========================================
       let commitsRoast = "";
-      if (mode === 'mild') {
-        commitsRoast = `Your commit logs read like a polite panic attack: "fixed typo", "actually fixed typo", "please work", and the classic 2:45 AM "wip". We appreciate your dedication to testing in production.`;
-      } else if (mode === 'nuclear') {
-        commitsRoast = `Your git history is a war crime against version control. Pushing direct to main branch with commit messages like "asdfgh" and "final_final_v3". If git blame was a criminal court, you'd be serving three consecutive life sentences.`;
+      if (liveCommits.length > 0) {
+        const c1 = liveCommits[0].msg;
+        const c2 = liveCommits[1] ? liveCommits[1].msg : null;
+        const targetRepoName = liveCommits[0].repo || latestRepo.name;
+
+        if (mode === 'nuclear') {
+          commitsRoast = `Live audit of your recent git commits caught red-handed: "${c1}"${c2 ? ` followed immediately by "${c2}"` : ''}. Pushing directly to branch '${latestCommitBranch}' on '${targetRepoName}' without code review is a war crime against version control. If git blame was a criminal court, you'd be serving three consecutive life sentences with no possibility of parole.`;
+        } else if (mode === 'mild') {
+          commitsRoast = `Polite inspection of your live git trail spotted messages like "${c1}"${c2 ? ` and "${c2}"` : ''}. Pushed to '${latestCommitBranch}' on '${targetRepoName}' with the fearless optimism of someone testing directly in production. We appreciate your courage, if not your branch protection rules.`;
+        } else {
+          commitsRoast = `Live telemetry captured your actual commit trail: "${c1}"${c2 ? ` and "${c2}"` : ''}. Pushed to branch '${latestCommitBranch}' on '${targetRepoName}'. Your commit history reads like a psychiatric evaluation of someone desperately negotiating with their linter at 2:45 AM.`;
+        }
       } else {
-        commitsRoast = `Commit discipline is essentially non-existent. A sporadic green tile graph resembling Morse code for "help me", punctuated by 4-week dry spells where you probably reconsidered your entire engineering career.`;
+        // Based on push frequency and days since last push
+        if (daysSinceLastPush < 7) {
+          commitsRoast = `Fresh code pushed just ${daysSinceLastPush === 0 ? 'a few hours ago' : `${daysSinceLastPush} days ago`} to '${latestRepo.name}'. You're committing to branch '${latestRepo.default_branch || 'main'}' with zero tests and unpinned dependencies, treating GitHub like a shared Google Drive for experimental ${topLang} scripts.`;
+        } else if (daysSinceLastPush >= 60) {
+          commitsRoast = `Telemetry detects radioactive inactivity: last code push was ${daysSinceLastPush} days ago on '${latestRepo.name}'. Your contribution graph looks like an abandoned salt flat in Nevada, interrupted by a single green tile when you accidentally changed your profile README.`;
+        } else {
+          commitsRoast = `Autopsy of your ${repoCount} repositories reveals that at least ${Math.min(repoCount, Math.max(2, Math.floor(repoCount * 0.4)))} projects were created, given a single initial commit, and immediately abandoned. You start repositories like gym memberships on January 1st and abandon them by January 4th.`;
+        }
       }
 
-      // 4. Tech Stack Roast
+      // ==========================================
+      // 4. DYNAMIC REAL-TIME STACK ROAST (p#card-roast-stack)
+      // ==========================================
       let stackRoast = "";
-      if (topLang.includes("Java") && !topLang.includes("Script")) {
-        stackRoast = `Dominant language is Java. You probably require 14 abstract factory interfaces and an XML configuration file just to write a "Hello World" console log.`;
-      } else if (topLang.includes("Python")) {
-        stackRoast = `Heavy Python user. 80% of your repositories are unpinned Jupyter notebooks titled "Untitled12.ipynb" full of memory leaks and unhandled torch exceptions.`;
-      } else if (topLang.includes("Rust")) {
-        stackRoast = `Writing Rust. You spent three weeks fighting the borrow checker just to build a command-line tool that cat's a text file, and you haven't stopped tweeting about memory safety since.`;
-      } else if (topLang.includes("TypeScript") || topLang.includes("JavaScript")) {
-        stackRoast = `A node_modules folder heavy enough to generate its own gravitational field. 370 npm packages imported just to pad a string or check if an integer is odd.`;
+      if (detectedFrameworks.length > 0) {
+        stackRoast = `Stack fingerprint: ${langBreakdown}. Spotted ${detectedFrameworks.slice(0, 3).join(', ')} embedded in '${topRepo.name}'. You've imported 400 node_modules and 18 build plugins just to render a component that could have been built with 4 lines of clean HTML in 1999.`;
+      } else if (topLang.includes('Python')) {
+        stackRoast = `Stack fingerprint: ${langBreakdown}. Repositories like '${topRepo.name}' are crammed with unpinned requirements.txt, loose .ipynb notebooks, and unhandled memory allocations. You're one unversioned package update away from your entire environment collapsing into dust.`;
+      } else if (topLang.includes('Type') || topLang.includes('Java')) {
+        stackRoast = `Stack fingerprint: ${langBreakdown}. The node_modules folder for '${topRepo.name}' possesses its own gravitational pull. 380 external npm packages imported just to pad a string, format a timestamp, or check if an integer is odd.`;
+      } else if (topLang.includes('Rust') || topLang.includes('Go') || topLang.includes('C')) {
+        stackRoast = `Stack fingerprint: ${langBreakdown}. Writing low-level systems code in '${topRepo.name}' with religious fervor. You spend 4 days fighting compiler lifetime borrow checkers just to build a CLI utility that parses a text file slower than awk.`;
       } else {
-        stackRoast = `A bizarre cocktail of repos featuring ${topLang}. Half of them are forks of libraries you thought you'd contribute to before realizing you had to read someone else's clean code.`;
+        stackRoast = `A chaotic polyglot buffet: ${langBreakdown} distributed across '${topRepo.name}' and '${sampleRepo.name}'. You hop between programming languages and frameworks the instant a project reaches the hard part of actually implementing business logic.`;
       }
 
-      // 5. Bio vs Reality Roast
+      // ==========================================
+      // 5. DYNAMIC REAL-TIME BIO ROAST (p#card-roast-bio)
+      // ==========================================
       let bioRoast = "";
       if (bio.length > 0) {
-        bioRoast = `Bio ambitiously states: "${bio}". Yet your repositories display 0 merged pull requests, three half-baked clones of HackerNews, and a README that consists solely of a broken Shields.io build badge.`;
+        const companyStr = company ? ` at ${company}` : '';
+        const locStr = location ? ` based in ${location}` : '';
+        const blogStr = blog ? ` (personal site: ${truncateText(blog, 24)})` : '';
+        
+        if (salt > 0.5) {
+          bioRoast = `Bio claims: "${truncateText(bio, 65)}"${companyStr}${locStr}. However, an audit of your ${repoCount} repositories reveals a grand total of ${totalStars} stars and ${totalForks} forks. Your flagship project '${topRepo.name}' has ${topRepo.stargazers_count} stars—meaning your Twitter bio has significantly more followers than your code has users.`;
+        } else {
+          bioRoast = `Self-styled: "${truncateText(bio, 65)}"${blogStr}. You present yourself as an architectural visionary on your profile, while your public commit log proves your day-to-day reality is 90% fixing CSS padding and googling regex syntax.`;
+        }
       } else {
-        bioRoast = `No profile bio. Probably because articulating the architectural horrors lurking inside your public repositories would trigger an automated terms-of-service warning.`;
+        const locStr = location ? `, transmitting anonymously from ${location}` : '';
+        const compStr = company ? ` under the banner of ${company}` : '';
+        bioRoast = `Profile bio is left completely blank${locStr}${compStr}. Leaving the bio empty is a shrewd legal defense—any written statement attempting to rationalize the architectural atrocities inside '${topRepo.name}' could be submitted as evidence in developer court.`;
       }
 
-      // 6. Dishonor Badges
-      const allBadges = [
-        { icon: "🚩", title: "Commit: 'fixed stuff'", desc: "Pushed 43 files with zero explanation" },
-        { icon: "💀", title: "README > Codebase", desc: "Wrote 800 words of docs for 20 lines of code" },
-        { icon: "📦", title: "Checked in .env once", desc: "API keys donated to Russian crypto miners" },
-        { icon: "👻", title: "Ghost Town Repos", desc: "Last active commit dated back to prehistoric eras" },
-        { icon: "🚨", title: "Main Branch Menace", desc: "PRs are for cowards who test their logic" },
-        { icon: "🪦", title: "14 Starred Frameworks", desc: "Will never actually read or clone any of them" },
-        { icon: "🤡", title: "Copy-Paste Virtuoso", desc: "Single-handedly keeping StackOverflow servers warm" },
-        { icon: "🌀", title: "Tutorial Loophole", desc: "10th attempt at building a Markdown blog" }
-      ];
+      // ==========================================
+      // 6. DYNAMIC REAL-TIME DISHONOR BADGES (div#card-badges-grid)
+      // ==========================================
+      const badgePool = [];
 
-      // Shuffle badges deterministically
-      const selectedBadges = [
-        allBadges[(Math.abs(username.charCodeAt(0) || 1)) % allBadges.length],
-        allBadges[(Math.abs(username.charCodeAt(1) || 2) + 2) % allBadges.length],
-        allBadges[(Math.abs(username.charCodeAt(2) || 3) + 4) % allBadges.length],
-        allBadges[(Math.abs(username.length || 4) + 6) % allBadges.length]
-      ];
+      // A. Real live commit badge if available
+      if (liveCommits.length > 0) {
+        badgePool.push({
+          icon: "💬",
+          title: `Commit: "${truncateText(liveCommits[0].msg, 14)}"`,
+          desc: `Actual live commit pushed to branch '${latestCommitBranch}'`
+        });
+      }
 
-      // 7. Backhanded Compliment
+      // B. Top repo hazard badge
+      if (topRepo) {
+        badgePool.push({
+          icon: "📦",
+          title: `'${truncateText(topRepo.name, 12)}' Hazard`,
+          desc: `${topRepo.stargazers_count} stars · ${topRepo.open_issues_count || 0} open issues`
+        });
+      }
+
+      // C. Zero stars badge
+      if (zeroStarCount > 0) {
+        badgePool.push({
+          icon: "🕳️",
+          title: "Star Black Hole",
+          desc: `${zeroStarCount} of ${repoCount} repos received 0 stars`
+        });
+      }
+
+      // D. Fork hoarder badge
+      if (forkCount > 0) {
+        badgePool.push({
+          icon: "🍴",
+          title: "Fork Collector",
+          desc: `${forkCount} cloned forks, zero upstream pull requests`
+        });
+      }
+
+      // E. Recent push vs Inactive badge
+      if (daysSinceLastPush < 7) {
+        badgePool.push({
+          icon: "🔥",
+          title: "Fresh Main Push",
+          desc: `Pushed to '${truncateText(latestRepo.name, 10)}' ${daysSinceLastPush}d ago with no review`
+        });
+      } else if (daysSinceLastPush > 60) {
+        badgePool.push({
+          icon: "🪦",
+          title: `${daysSinceLastPush}d Silence`,
+          desc: `Last seen touching '${truncateText(latestRepo.name, 10)}'`
+        });
+      }
+
+      // F. Language fanatic badge
+      badgePool.push({
+        icon: getLanguageIcon(topLang),
+        title: `${topLang} Fanatic`,
+        desc: `${langStats[0] ? langStats[0].pct : 100}% of public repositories written in ${topLang}`
+      });
+
+      // G. Framework devotee badge
+      if (detectedFrameworks.length > 0) {
+        badgePool.push({
+          icon: "⚡",
+          title: `${detectedFrameworks[0]} Devotee`,
+          desc: `Over-engineered stack for a zero-user prototype`
+        });
+      }
+
+      // H. Follower asymmetry badge
+      if (following > followers * 2 && following > 15) {
+        badgePool.push({
+          icon: "👀",
+          title: "Follower Deficit",
+          desc: `Following ${following} devs while only ${followers} follow back`
+        });
+      }
+
+      // I. Account veteran badge
+      badgePool.push({
+        icon: "⏳",
+        title: `${accountYears}yr Git Veteran`,
+        desc: `Account opened in ${joinYear}, still no production deploy`
+      });
+
+      // J. Open issues badge
+      if (totalOpenIssues > 0) {
+        badgePool.push({
+          icon: "🚨",
+          title: "Issue Evader",
+          desc: `${totalOpenIssues} open issues politely left unread`
+        });
+      }
+
+      // K. Unlicensed code pirate
+      if (noLicenseCount > 0) {
+        badgePool.push({
+          icon: "🏴‍☠️",
+          title: "Unlicensed Code Pirate",
+          desc: `${noLicenseCount} repos without a LICENSE file`
+        });
+      }
+
+      // L. Repo hoarder
+      if (repoCount >= 8) {
+        badgePool.push({
+          icon: "🗄️",
+          title: `${repoCount} Repo Graveyard`,
+          desc: "Starts 4 projects every weekend, completes none"
+        });
+      }
+
+      // Deterministically / randomly pick 4 distinct badges from the dynamic pool
+      const shuffledBadges = [...badgePool].sort((a,b) => {
+        const hashA = (a.title.charCodeAt(0) * 17 + a.title.length * 31 + Math.floor(salt * 100)) % 100;
+        const hashB = (b.title.charCodeAt(0) * 17 + b.title.length * 31 + Math.floor(salt * 100)) % 100;
+        return hashA - hashB;
+      });
+      const selectedBadges = shuffledBadges.slice(0, 4);
+
+      // ==========================================
+      // 7. BACKHANDED COMPLIMENT
+      // ==========================================
       const compliments = [
-        `"At least your .gitignore is properly configured. Too bad nobody is ever going to clone this to find out."`,
-        `"On the bright side, your variable names are so cryptic that your code is accidentally quantum-encrypted."`,
+        `"At least your .gitignore is properly configured. Too bad nobody is ever going to clone '${topRepo.name}' to find out."`,
+        `"On the bright side, your variable names in '${topRepo.name}' are so cryptic that your code is accidentally quantum-encrypted."`,
         `"You have great taste in GitHub dark mode theme, even if your repository architecture looks like an abandoned carnival."`,
-        `"Your ability to ignore failing GitHub Action workflows shows commendable emotional resilience."`,
+        `"Your ability to ignore ${totalOpenIssues} failing workflows and open issues shows commendable emotional resilience."`,
         `"At least your code is 100% bug-free in production, strictly because you've never managed to successfully deploy it."`
       ];
-      const compliment = pickByHash(compliments, username, accountYears);
+      const compliment = compliments[Math.floor(salt * compliments.length)];
 
       // Ego Annihilation score
       let damageScore = 88;
-      if (mode === 'nuclear') damageScore = 96 + (Math.abs(username.charCodeAt(0) || 5) % 4);
-      else if (mode === 'mild') damageScore = 72 + (Math.abs(username.charCodeAt(0) || 3) % 15);
-      else damageScore = 89 + (Math.abs(username.charCodeAt(0) || 4) % 10);
+      if (mode === 'nuclear') damageScore = 96 + (Math.floor(salt * 4));
+      else if (mode === 'mild') damageScore = 72 + (Math.floor(salt * 15));
+      else damageScore = 89 + (Math.floor(salt * 10));
 
       return {
         user,
-        repos,
+        repos: repoList,
+        events,
         archetype,
         headline,
         commitsRoast,
@@ -1305,8 +1803,9 @@
         await new Promise(r => setTimeout(r, 450));
       }
 
-      const { user, repos } = await fetchPromise;
-      const roast = synthesizeRoast(user, repos, mode);
+      const { user, repos, events } = await fetchPromise;
+      currentRawProfileData = { user, repos, events };
+      const roast = synthesizeRoast(user, repos, mode, events);
       currentRoastData = roast;
 
       // Persist search and update Hall of Flame leaderboard
@@ -1348,7 +1847,7 @@
       try {
         const fetchFn = (typeof window !== 'undefined' && window.fetch) ? window.fetch.bind(window) : fetch;
         const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-        const timeoutId = controller ? setTimeout(() => controller.abort(), 6000) : null;
+        const timeoutId = controller ? setTimeout(() => controller.abort(), 6500) : null;
 
         const userRes = await fetchFn(`https://api.github.com/users/${encodeURIComponent(username)}`, {
           signal: controller ? controller.signal : undefined
@@ -1356,7 +1855,6 @@
         if (timeoutId) clearTimeout(timeoutId);
         
         if (!userRes.ok) {
-          // Rate-limited (403) or not found (404) -> Fall back gracefully to procedural profile
           console.warn(`GitHub API returned ${userRes.status}, falling back to heuristic procedural profile.`);
           return generateFallbackProfile(username);
         }
@@ -1366,8 +1864,8 @@
         let repoData = [];
         try {
           const repoController = typeof AbortController !== 'undefined' ? new AbortController() : null;
-          const repoTimeoutId = repoController ? setTimeout(() => repoController.abort(), 6000) : null;
-          const repoRes = await fetchFn(`https://api.github.com/users/${encodeURIComponent(username)}/repos?sort=updated&per_page=15`, {
+          const repoTimeoutId = repoController ? setTimeout(() => repoController.abort(), 6500) : null;
+          const repoRes = await fetchFn(`https://api.github.com/users/${encodeURIComponent(username)}/repos?sort=updated&per_page=30`, {
             signal: repoController ? repoController.signal : undefined
           });
           if (repoTimeoutId) clearTimeout(repoTimeoutId);
@@ -1378,7 +1876,26 @@
           console.warn("Could not fetch repo list, using empty set.", e);
         }
 
-        return { user: userData, repos: Array.isArray(repoData) ? repoData : [] };
+        let eventData = [];
+        try {
+          const evController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          const evTimeoutId = evController ? setTimeout(() => evController.abort(), 5500) : null;
+          const evRes = await fetchFn(`https://api.github.com/users/${encodeURIComponent(username)}/events/public?per_page=20`, {
+            signal: evController ? evController.signal : undefined
+          });
+          if (evTimeoutId) clearTimeout(evTimeoutId);
+          if (evRes.ok) {
+            eventData = await evRes.json();
+          }
+        } catch (e) {
+          console.warn("Could not fetch events list.", e);
+        }
+
+        return {
+          user: userData,
+          repos: Array.isArray(repoData) ? repoData : [],
+          events: Array.isArray(eventData) ? eventData : []
+        };
       } catch (err) {
         console.warn("Network error reaching GitHub, deploying procedural heuristic profile.", err);
         return generateFallbackProfile(username);
@@ -1387,28 +1904,88 @@
 
     // Procedural Fallback when GitHub API is 403 or offline
     function generateFallbackProfile(username) {
-      const isPreset = PRESETS[username.toLowerCase()];
-      const mockYears = 2 + (Math.abs(username.charCodeAt(0) || 3) % 8);
-      const mockRepos = 6 + (Math.abs(username.charCodeAt(1) || 5) % 35);
-      const mockFollowers = 12 + (Math.abs(username.charCodeAt(2) || 7) % 400);
+      const cleanU = (username || 'user').toLowerCase();
+      const seed1 = Math.abs(cleanU.charCodeAt(0) || 3);
+      const seed2 = Math.abs(cleanU.charCodeAt(1) || 7);
+      const seed3 = Math.abs(cleanU.charCodeAt(2) || 9);
+      const mockYears = 1 + (seed1 % 9);
+      const mockRepos = 5 + (seed2 % 38);
+      const mockFollowers = 8 + (seed3 % 520);
+      const mockFollowing = 5 + (seed1 % 75);
+
+      const possibleLanguages = ['TypeScript', 'Python', 'Rust', 'JavaScript', 'Go', 'C++', 'Java', 'PHP', 'Swift'];
+      const lang1 = possibleLanguages[seed1 % possibleLanguages.length];
+      const lang2 = possibleLanguages[(seed1 + 2) % possibleLanguages.length];
+
+      const sampleRepoNames = [
+        `${cleanU}-portfolio-v${(seed1 % 5) + 1}`,
+        `react-todo-${['omega', 'pro', 'lite', 'turbo', 'final'][seed2 % 5]}`,
+        `ai-${['rag-agent', 'vision-bot', 'crypto-trader', 'summarizer', 'flow'][seed3 % 5]}`,
+        `${['fast', 'micro', 'clean', 'hyper'][seed1 % 4]}-${lang1.toLowerCase()}-api`,
+        `docker-${['starter', 'compose-cluster', 'env-template'][seed2 % 3]}`
+      ];
+
+      const mockReposList = sampleRepoNames.map((name, idx) => ({
+        name,
+        description: [
+          `A fullstack experiment built with ${lang1} that never quite reached production.`,
+          `Weekend prototype created to test ${lang2} frameworks.`,
+          `CLI tool with unhandled errors and zero documentation.`,
+          `Personal utility script with hardcoded environment variables.`,
+          `Fork of an open-source library I swore I would contribute to.`
+        ][idx % 5],
+        language: idx === 0 ? lang1 : (idx === 1 ? lang2 : possibleLanguages[(seed1 + idx) % possibleLanguages.length]),
+        stargazers_count: idx === 0 ? (seed2 % 14) : (seed3 % 3 === 0 ? 1 : 0),
+        forks_count: idx === 0 ? (seed1 % 4) : 0,
+        open_issues_count: (seed2 + idx) % 4,
+        fork: idx === 4,
+        pushed_at: new Date(Date.now() - (idx * 24 + seed1 * 3) * 86400000).toISOString(),
+        created_at: new Date(Date.now() - (mockYears * 365 + idx * 30) * 86400000).toISOString(),
+        default_branch: ['main', 'master', 'dev'][seed3 % 3],
+        license: idx === 0 ? { key: 'mit', name: 'MIT License' } : null
+      }));
+
+      const mockCommitMessages = [
+        "fixed typo and broke production",
+        "please work finally v4",
+        "wip: temporary hack do not merge",
+        "update readme and config",
+        "merge branch 'main' into main",
+        "remove sensitive keys from git history"
+      ];
+
+      const mockEvents = [
+        {
+          type: 'PushEvent',
+          created_at: new Date(Date.now() - (seed1 * 12 + 4) * 3600000).toISOString(),
+          repo: { name: `${username}/${sampleRepoNames[0]}` },
+          payload: {
+            ref: `refs/heads/${mockReposList[0].default_branch}`,
+            commits: [
+              { message: mockCommitMessages[seed1 % mockCommitMessages.length] },
+              { message: mockCommitMessages[(seed2 + 1) % mockCommitMessages.length] }
+            ]
+          }
+        }
+      ];
 
       return {
         user: {
           login: username,
-          name: isPreset ? username.toUpperCase() : `${username.charAt(0).toUpperCase() + username.slice(1)} (Unverified)`,
+          name: `${username.charAt(0).toUpperCase() + username.slice(1)}`,
           avatar_url: `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(username)}`,
-          bio: "Self-proclaimed tech architect. Pushes code that breaks production at 4 PM on Fridays.",
+          bio: `${['Fullstack Developer', 'Software Engineer', 'Code Enthusiast', 'Open Source Tinkerer', 'AI Architect'][seed1 % 5]} building things on the internet.`,
+          company: (seed2 % 2 === 0) ? `@${cleanU}-labs` : null,
+          location: ['San Francisco, CA', 'Berlin, Germany', 'London, UK', 'Tokyo, Japan', 'Bengaluru, India', 'Remote / Earth'][seed3 % 6],
+          blog: `https://${cleanU}.dev`,
           public_repos: mockRepos,
           followers: mockFollowers,
-          following: 8,
+          following: mockFollowing,
           created_at: `${2026 - mockYears}-04-12T00:00:00Z`,
           html_url: `https://github.com/${username}`
         },
-        repos: [
-          { name: "portfolio-v4-final-abandoned", language: "TypeScript", stargazers_count: 0, pushed_at: "2025-11-01" },
-          { name: "react-todo-omega", language: "JavaScript", stargazers_count: 1, pushed_at: "2025-08-15" },
-          { name: "crypto-ai-arbitrage-bot", language: "Python", stargazers_count: 0, pushed_at: "2024-03-20" }
-        ]
+        repos: mockReposList,
+        events: mockEvents
       };
     }
 
@@ -1526,10 +2103,64 @@
       // Timestamp
       document.getElementById('card-timestamp').textContent = `Timestamp: ${new Date().toISOString().split('T')[0]}`;
 
+      // Trigger flash animations on the updated roast elements
+      triggerRealtimeTextFlash();
+
       // Twitter / X intent share link with Spaghetti rating
       const starsEmoji = '⭐'.repeat(spaghetti.stars);
       const tweetText = `My GitHub profile (@${u.login}) was just brutally roasted by GitHub Shame Engine!\n\n🍝 Spaghetti Rating: ${starsEmoji} (${spaghetti.stars}/5 - ${spaghetti.title})\n🎭 Diagnosed Archetype: ${roast.archetype}\n💥 Ego Annihilation: ${roast.damageScore}%\n"${roast.headline}"\n\nRoast yours at:`;
       shareXLink.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+    }
+
+    // Flash animation trigger for real-time text updates
+    function triggerRealtimeTextFlash() {
+      const targets = [
+        document.getElementById('card-roast-headline'),
+        document.getElementById('card-roast-commits'),
+        document.getElementById('card-roast-stack'),
+        document.getElementById('card-roast-bio')
+      ];
+      targets.forEach(el => {
+        if (el) {
+          el.classList.remove('realtime-text-flash');
+          void el.offsetWidth;
+          el.classList.add('realtime-text-flash');
+        }
+      });
+      const badgeElements = document.querySelectorAll('#card-badges-grid > div');
+      badgeElements.forEach(b => {
+        b.classList.remove('badge-flash-anim');
+        void b.offsetWidth;
+        b.classList.add('badge-flash-anim');
+      });
+    }
+
+    // Re-Roll / Re-Cook Real-Time Roast Handler
+    const rerollRoastBtn = document.getElementById('reroll-roast-btn');
+    const rerollBtnText = document.getElementById('reroll-btn-text');
+    if (rerollRoastBtn) {
+      rerollRoastBtn.addEventListener('click', () => {
+        if (!currentRawProfileData) {
+          showToast('Please roast a GitHub profile first!');
+          return;
+        }
+        sound.playBurnSizzle();
+        if (rerollBtnText) rerollBtnText.textContent = 'Cooking...';
+
+        const { user, repos, events } = currentRawProfileData;
+        const mode = roastModeSelect ? roastModeSelect.value : 'spicy';
+        const freshRoast = synthesizeRoast(user, repos, mode, events, { salt: Math.random() });
+        currentRoastData = freshRoast;
+
+        // Re-render card with fresh real-time variations
+        renderRoastCard(freshRoast);
+        animateEgoCounter(freshRoast.damageScore);
+
+        setTimeout(() => {
+          if (rerollBtnText) rerollBtnText.textContent = 'Re-Cook Roast';
+          showToast('⚡ Fresh real-time roast synthesized!');
+        }, 300);
+      });
     }
 
     // Animate Ego Annihilation Counter
@@ -2039,70 +2670,614 @@ Roasted at github-shame-engine.vercel.app`;
     }
 
     // ==========================================
-    // Hall of Flame: LocalStorage Leaderboard
+    // Hall of Flame: Dynamic Real-Time Leaderboard Engine
     // ==========================================
-    const LEADERBOARD_STORAGE_KEY = 'gitroast_leaderboard';
+    const LEADERBOARD_STORAGE_KEY = 'gitroast_leaderboard_live_v2';
+    const GLOBAL_STATS_STORAGE_KEY = 'gitroast_global_stats_v2';
+    const LIVE_FEED_STORAGE_KEY = 'gitroast_live_feed_v2';
 
-    const INITIAL_LEADERBOARD = [
+    // Expanded pool of 16 iconic developers and offenders
+    const DEFAULT_ROSTER = [
       {
         username: "torvalds",
         name: "Linus Torvalds",
-        count: 42,
+        count: 46,
         avatar_url: "https://avatars.githubusercontent.com/u/1024025?v=4",
         archetype: "Kernel Dictator with Anger Issues",
-        damageScore: 100
+        damageScore: 100,
+        trendScore: 35,
+        lastRoastedAt: Date.now() - 6000
       },
       {
         username: "shadcn",
         name: "shadcn",
-        count: 35,
+        count: 38,
         avatar_url: "https://avatars.githubusercontent.com/u/124599?v=4",
         archetype: "The Copy-Paste Cartel Boss",
-        damageScore: 95
+        damageScore: 95,
+        trendScore: 28,
+        lastRoastedAt: Date.now() - 14000
       },
       {
         username: "gaearon",
         name: "Dan Abramov",
-        count: 28,
+        count: 32,
         avatar_url: "https://avatars.githubusercontent.com/u/810438?v=4",
         archetype: "Hooks Philosophy Traumatizer",
-        damageScore: 94
+        damageScore: 94,
+        trendScore: 22,
+        lastRoastedAt: Date.now() - 25000
       },
       {
         username: "karpathy",
         name: "Andrej Karpathy",
-        count: 22,
+        count: 27,
         avatar_url: "https://avatars.githubusercontent.com/u/241138?v=4",
         archetype: "Raw CUDA Sorcerer & Vibe Prophet",
-        damageScore: 92
+        damageScore: 92,
+        trendScore: 26,
+        lastRoastedAt: Date.now() - 40000
+      },
+      {
+        username: "antfu",
+        name: "Anthony Fu",
+        count: 25,
+        avatar_url: "https://avatars.githubusercontent.com/u/11247099?v=4",
+        archetype: "Package Ecosystem Overlord",
+        damageScore: 93,
+        trendScore: 30,
+        lastRoastedAt: Date.now() - 55000
+      },
+      {
+        username: "yyx990803",
+        name: "Evan You",
+        count: 23,
+        avatar_url: "https://avatars.githubusercontent.com/u/499550?v=4",
+        archetype: "Vite Compilation Speed Demon",
+        damageScore: 91,
+        trendScore: 18,
+        lastRoastedAt: Date.now() - 80000
+      },
+      {
+        username: "t3dotgg",
+        name: "Theo Browne",
+        count: 21,
+        avatar_url: "https://avatars.githubusercontent.com/u/6751787?v=4",
+        archetype: "Create-T3-App Screaming Evangelist",
+        damageScore: 94,
+        trendScore: 24,
+        lastRoastedAt: Date.now() - 110000
+      },
+      {
+        username: "leerob",
+        name: "Lee Robinson",
+        count: 19,
+        avatar_url: "https://avatars.githubusercontent.com/u/9113740?v=4",
+        archetype: "Next.js App Router Apologist",
+        damageScore: 90,
+        trendScore: 16,
+        lastRoastedAt: Date.now() - 140000
+      },
+      {
+        username: "rich-harris",
+        name: "Rich Harris",
+        count: 18,
+        avatar_url: "https://avatars.githubusercontent.com/u/1162160?v=4",
+        archetype: "Svelte Compiler Wizard & React Sceptic",
+        damageScore: 92,
+        trendScore: 14,
+        lastRoastedAt: Date.now() - 170000
+      },
+      {
+        username: "dhh",
+        name: "David Heinemeier Hansson",
+        count: 17,
+        avatar_url: "https://avatars.githubusercontent.com/u/2741?v=4",
+        archetype: "Rails Zealot & Cloud Hater",
+        damageScore: 96,
+        trendScore: 21,
+        lastRoastedAt: Date.now() - 200000
+      },
+      {
+        username: "sindresorhus",
+        name: "Sindre Sorhus",
+        count: 16,
+        avatar_url: "https://avatars.githubusercontent.com/u/170270?v=4",
+        archetype: "One-Liner NPM Module Hoarder",
+        damageScore: 93,
+        trendScore: 15,
+        lastRoastedAt: Date.now() - 230000
+      },
+      {
+        username: "rauchg",
+        name: "Guillermo Rauch",
+        count: 15,
+        avatar_url: "https://avatars.githubusercontent.com/u/13041?v=4",
+        archetype: "Serverless Edge Cloud Monopolist",
+        damageScore: 89,
+        trendScore: 12,
+        lastRoastedAt: Date.now() - 260000
+      },
+      {
+        username: "developit",
+        name: "Jason Miller",
+        count: 14,
+        avatar_url: "https://avatars.githubusercontent.com/u/105127?v=4",
+        archetype: "Micro-Library Optimization Fanatic",
+        damageScore: 88,
+        trendScore: 10,
+        lastRoastedAt: Date.now() - 290000
+      },
+      {
+        username: "cassidoo",
+        name: "Cassidy Williams",
+        count: 13,
+        avatar_url: "https://avatars.githubusercontent.com/u/1454517?v=4",
+        archetype: "Mechanical Keyboard Comedian",
+        damageScore: 87,
+        trendScore: 11,
+        lastRoastedAt: Date.now() - 320000
+      },
+      {
+        username: "addyosmani",
+        name: "Addy Osmani",
+        count: 12,
+        avatar_url: "https://avatars.githubusercontent.com/u/110953?v=4",
+        archetype: "Web Performance Metric Over-Analyzer",
+        damageScore: 89,
+        trendScore: 9,
+        lastRoastedAt: Date.now() - 350000
       },
       {
         username: "vibe-coder-404",
         name: "Vibe Coder",
-        count: 17,
+        count: 11,
         avatar_url: "https://api.dicebear.com/7.x/identicon/svg?seed=vibe-coder-404",
         archetype: "Tutorial Hell Veteran",
-        damageScore: 89
+        damageScore: 89,
+        trendScore: 8,
+        lastRoastedAt: Date.now() - 380000
       }
     ];
 
+    // Live pithy roast punchlines for ticker
+    const LIVE_ROAST_PITHY_QUOTES = {
+      torvalds: [
+        "Kernel panic triggered: 'Whitespace error on line 420'",
+        "Git blame redirected all blame back to Linus himself",
+        "Refused pull request with 8 fiery exclamation marks"
+      ],
+      shadcn: [
+        "Pasted 42 components into root directory without package.json",
+        "Styled an empty div with 38 utility classes and zero content",
+        "Accidentally installed 3 conflicting Tailwind plugins at once"
+      ],
+      gaearon: [
+        "Trapped in an infinite useEffect dependency loop since 2019",
+        "Replaced Redux with an even more complicated reducer hook",
+        "Wrote a 14-page essay explaining why you shouldn't use useMemo"
+      ],
+      karpathy: [
+        "CUDA kernel exploded: memory out of bounds on tensor[0]",
+        "Trained micro-LLM on his own Twitter replies",
+        "Loss function diverged into existential dread"
+      ],
+      antfu: [
+        "Released 6 new vite plugins before breakfast was served",
+        "Monorepo with 400 packages broke the GitHub graph",
+        "Converted another codebase to pure unplugin magic"
+      ],
+      yyx990803: [
+        "Vite compiled the app before the user even pressed Save",
+        "Rewrote entire reactivity engine in 40 lines of TypeScript",
+        "Vue 4 announced secretly during coffee break"
+      ],
+      t3dotgg: [
+        "Screamed at Next.js App Router caching for 45 min on Twitch",
+        "TypeScript type error caused visible physical agony",
+        "Rewrote entire backend in tRPC v11 alpha overnight"
+      ],
+      leerob: [
+        "Defended Server Actions against 14 angry Hacker News commenters",
+        "Vercel edge function timed out after 300ms",
+        "Optimized og:image generation to sub-millisecond"
+      ],
+      rich_harris: [
+        "Compiler generated 3 lines of JavaScript that replaced React",
+        "No virtual DOM was harmed during this execution",
+        "Reactivity declared dead, long live Runes"
+      ],
+      dhh: [
+        "Purchased 20 bare-metal servers just to delete AWS account",
+        "Banned TypeScript from another framework codebase",
+        "Wrote an entire SaaS with Vanilla Hotwire in 4 hours"
+      ],
+      sindresorhus: [
+        "Published a 2-line npm package with 120M monthly downloads",
+        "Has 1,400 open pull requests waiting for review",
+        "Wrote another CLI tool that does exactly one single thing"
+      ],
+      rauchg: [
+        "Static site exported directly to 300 edge nodes globally",
+        "Deploy preview ready in 400 milliseconds flat",
+        "Pushed directly to master at 3 AM from an iPhone"
+      ],
+      developit: [
+        "Shrunk the entire frontend bundle to 2.4 kilobytes",
+        "Preact virtual DOM fits inside a floppy disk",
+        "Refactored React to zero dependencies"
+      ],
+      cassidoo: [
+        "Sold another artisan keycap while fixing CSS flexbox bug",
+        "Sent hilarious developer newsletter during production outage",
+        "Solved coding interview question using only emoji"
+      ],
+      addyosmani: [
+        "Found 40 unnecessary milliseconds in the Critical Rendering Path",
+        "Lighthouse score dropped from 100 to 99: total crisis",
+        "Audited 12MB bundle down to 11.9MB with pride"
+      ],
+      "vibe-coder-404": [
+        "Watched 40 hours of React tutorials, built 0 applications",
+        "Pushed node_modules directly to main branch",
+        "Copy-pasted code from ChatGPT that hallucinated library names"
+      ]
+    };
+
+    const GENERIC_ROAST_QUOTES = [
+      "Pushed broken CSS directly to production at 4:58 PM on Friday",
+      "Git commit message reads: 'fixed bug for real this time pt 4'",
+      "Installed 480 dependencies to pad a string with two spaces",
+      "Empty README repository with 0 commits in the last 11 months",
+      "Claims 'Full Stack AI Architect' in bio, recent push is a color change",
+      "Merged pull request without running tests, CI/CD pipeline melted down",
+      "Console.log('here 12345') deployed to live production site"
+    ];
+
+    // Real-Time Engine State
+    let currentLeaderboardTab = 'top'; // 'top' | 'trending' | 'damage' | 'recent' | 'intensity'
+    let selectedIntensity = 'spicy'; // 'mild' | 'spicy' | 'nuclear'
+    let leaderboardDisplayLimit = 5; // 5 or 10
+    let isLiveSyncActive = true;
+    let nextRoastCountdown = 5;
+    let previousRanks = new Map(); // username -> rank number
+    let lastRoastedUsername = null;
+    let realTimeTickInterval = null;
+
+    // Helper: Map damage score to roast intensity tier
+    function getIntensityFromScore(score) {
+      const num = Number(score) || 90;
+      if (num >= 95) return 'nuclear';
+      if (num >= 89) return 'spicy';
+      return 'mild';
+    }
+
+    // Helper: Metadata for each intensity level
+    function getIntensityMeta(intensity) {
+      switch (intensity) {
+        case 'mild':
+          return {
+            label: 'Mild',
+            icon: '🌶️',
+            tagline: 'Passive-Aggressive',
+            colorClass: 'text-emerald-400',
+            badgeBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+            activeBtnClass: 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40 shadow-sm shadow-emerald-500/10'
+          };
+        case 'nuclear':
+          return {
+            label: 'Nuclear',
+            icon: '☢️',
+            tagline: 'Emotional Damage',
+            colorClass: 'text-purple-400',
+            badgeBg: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+            activeBtnClass: 'bg-purple-500/20 text-purple-300 font-bold border border-purple-500/40 shadow-sm shadow-purple-500/10'
+          };
+        case 'spicy':
+        default:
+          return {
+            label: 'Spicy',
+            icon: '🔥',
+            tagline: 'Senior Architect',
+            colorClass: 'text-amber-400',
+            badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+            activeBtnClass: 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40 shadow-sm shadow-amber-500/10'
+          };
+      }
+    }
+
+    // Pithy quotes organized by intensity level
+    const INTENSITY_PITHY_QUOTES = {
+      mild: [
+        "Left a TODO comment in production code dated 2021",
+        "Refactored variable name and opened an architectural RFC",
+        "Installed a 400KB package to left-pad an array with two spaces",
+        "Opened 12 tabs of StackOverflow for a basic CSS flexbox centering issue",
+        "Added 18 CSS utility classes to style an empty placeholder div",
+        "Created a feature branch 14 months ago with zero commits ahead"
+      ],
+      spicy: [
+        "Pasted 42 components into root directory without package.json",
+        "Trapped in an infinite useEffect dependency loop since 2022",
+        "Console.log('why is this happening') deployed to live production site",
+        "Empty README repository with 0 commits in the last 11 months",
+        "Claims 'Full Stack AI Architect' in bio, recent push is a button color change",
+        "Merged pull request without tests, CI pipeline crashed immediately"
+      ],
+      nuclear: [
+        "Pushed unencrypted production AWS keys to public repo at 3 AM",
+        "Single-handedly took down staging database with unindexed JOIN on 4M rows",
+        "Accidentally ran rm -rf on the main server during Friday afternoon deploy",
+        "Overwrote git history with force-push, wiped 3 months of team contributions",
+        "Billing debt exceeded NASA budget after infinite while loop on Lambda",
+        "Hardcoded database password as 'admin12345' in client-side bundle"
+      ]
+    };
+
+    // Cross-Tab Broadcast Channel (gracefully falls back if unavailable)
+    let broadcastChannel = null;
+    try {
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        broadcastChannel = new BroadcastChannel('gitroast_live_hall_channel');
+      }
+    } catch (e) {
+      console.warn("BroadcastChannel not supported", e);
+    }
+
+    // Helper: format relative time smoothly
+    function formatTimeAgo(timestamp) {
+      if (!timestamp) return 'Just now';
+      const diffSec = Math.max(0, Math.floor((Date.now() - timestamp) / 1000));
+      if (diffSec < 4) return 'Just now';
+      if (diffSec < 60) return `${diffSec}s ago`;
+      const diffMin = Math.floor(diffSec / 60);
+      if (diffMin < 60) return `${diffMin}m ago`;
+      const diffHr = Math.floor(diffMin / 60);
+      if (diffHr < 24) return `${diffHr}h ago`;
+      return `${Math.floor(diffHr / 24)}d ago`;
+    }
+
+    // Leaderboard Data Storage Accessors
     function getLeaderboard() {
       try {
         const raw = localStorage.getItem(LEADERBOARD_STORAGE_KEY);
-        if (!raw) {
-          localStorage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(INITIAL_LEADERBOARD));
-          return INITIAL_LEADERBOARD;
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length >= 3) {
+            return parsed;
+          }
         }
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+        // Check legacy key for migration
+        const legacyRaw = localStorage.getItem('gitroast_leaderboard');
+        if (legacyRaw) {
+          try {
+            const legacyParsed = JSON.parse(legacyRaw);
+            if (Array.isArray(legacyParsed) && legacyParsed.length > 0) {
+              const merged = [...DEFAULT_ROSTER];
+              legacyParsed.forEach(leg => {
+                const idx = merged.findIndex(m => m.username.toLowerCase() === leg.username.toLowerCase());
+                if (idx !== -1) {
+                  merged[idx].count = Math.max(merged[idx].count, leg.count || 0);
+                  if (leg.damageScore) merged[idx].damageScore = leg.damageScore;
+                } else {
+                  merged.unshift({
+                    ...leg,
+                    trendScore: 25,
+                    lastRoastedAt: Date.now() - 30000
+                  });
+                }
+              });
+              localStorage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(merged));
+              return merged;
+            }
+          } catch (e) {}
         }
+
+        localStorage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(DEFAULT_ROSTER));
+        return DEFAULT_ROSTER;
       } catch (err) {
         console.warn("Failed reading leaderboard from localStorage", err);
       }
-      return INITIAL_LEADERBOARD;
+      return DEFAULT_ROSTER;
     }
 
+    function saveLeaderboard(list) {
+      try {
+        localStorage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(list));
+      } catch (err) {
+        console.warn("Failed saving leaderboard", err);
+      }
+    }
+
+    function getGlobalStats() {
+      try {
+        const raw = localStorage.getItem(GLOBAL_STATS_STORAGE_KEY);
+        if (raw) {
+          return JSON.parse(raw);
+        }
+      } catch (e) {}
+      const initial = { totalRoasts: 15482, burnRate: 19, lastEventAt: Date.now() };
+      try { localStorage.setItem(GLOBAL_STATS_STORAGE_KEY, JSON.stringify(initial)); } catch (e) {}
+      return initial;
+    }
+
+    function saveGlobalStats(stats) {
+      try {
+        localStorage.setItem(GLOBAL_STATS_STORAGE_KEY, JSON.stringify(stats));
+      } catch (e) {}
+    }
+
+    function getLiveFeed() {
+      try {
+        const raw = localStorage.getItem(LIVE_FEED_STORAGE_KEY);
+        if (raw) {
+          const list = JSON.parse(raw);
+          if (Array.isArray(list) && list.length > 0) return list;
+        }
+      } catch (e) {}
+      const initialFeed = [
+        {
+          id: 'feed-1',
+          username: 'torvalds',
+          name: 'Linus Torvalds',
+          avatar_url: 'https://avatars.githubusercontent.com/u/1024025?v=4',
+          damageScore: 100,
+          intensity: 'nuclear',
+          stars: 5,
+          snippet: "Kernel panic: indentation violated tab-width convention",
+          timestamp: Date.now() - 4000
+        },
+        {
+          id: 'feed-2',
+          username: 'shadcn',
+          name: 'shadcn',
+          avatar_url: 'https://avatars.githubusercontent.com/u/124599?v=4',
+          damageScore: 95,
+          intensity: 'nuclear',
+          stars: 5,
+          snippet: "Pasted 42 components into root without package.json",
+          timestamp: Date.now() - 14000
+        },
+        {
+          id: 'feed-3',
+          username: 'gaearon',
+          name: 'Dan Abramov',
+          avatar_url: 'https://avatars.githubusercontent.com/u/810438?v=4',
+          damageScore: 94,
+          intensity: 'spicy',
+          stars: 4,
+          snippet: "Trapped in an infinite useEffect dependency loop since 2019",
+          timestamp: Date.now() - 22000
+        },
+        {
+          id: 'feed-4',
+          username: 'antfu',
+          name: 'Anthony Fu',
+          avatar_url: 'https://avatars.githubusercontent.com/u/11247099?v=4',
+          damageScore: 93,
+          intensity: 'spicy',
+          stars: 4,
+          snippet: "Monorepo with 400 packages broke the GitHub graph",
+          timestamp: Date.now() - 35000
+        },
+        {
+          id: 'feed-5',
+          username: 'vibe-coder-404',
+          name: 'Vibe Coder',
+          avatar_url: 'https://api.dicebear.com/7.x/identicon/svg?seed=vibe-coder-404',
+          damageScore: 86,
+          intensity: 'mild',
+          stars: 3,
+          snippet: "Left a TODO comment in production code dated 2021",
+          timestamp: Date.now() - 48000
+        }
+      ];
+      try { localStorage.setItem(LIVE_FEED_STORAGE_KEY, JSON.stringify(initialFeed)); } catch (e) {}
+      return initialFeed;
+    }
+
+    function saveLiveFeed(feed) {
+      try {
+        localStorage.setItem(LIVE_FEED_STORAGE_KEY, JSON.stringify(feed.slice(0, 10)));
+      } catch (e) {}
+    }
+
+    // Render the Live Activity Ticker Stream
+    function renderLiveActivityStream() {
+      const container = document.getElementById('live-activity-stream');
+      if (!container) return;
+      const allFeed = getLiveFeed();
+
+      // Filter by Intensity if intensity tab is currently selected
+      let feed = allFeed;
+      if (currentLeaderboardTab === 'intensity') {
+        const filtered = allFeed.filter(item => {
+          const itemInt = item.intensity || getIntensityFromScore(item.damageScore || 90);
+          return itemInt === selectedIntensity;
+        });
+        feed = filtered.length > 0 ? filtered : allFeed;
+      }
+
+      // Update stream count / mode badge
+      const streamBadge = document.getElementById('live-stream-count-badge');
+      if (streamBadge) {
+        if (currentLeaderboardTab === 'intensity') {
+          const meta = getIntensityMeta(selectedIntensity);
+          streamBadge.className = `px-2 py-0.5 rounded text-[11px] font-mono border ${meta.badgeBg}`;
+          streamBadge.innerHTML = `<span>${meta.icon} ${meta.label} Feed Active</span>`;
+        } else {
+          streamBadge.className = 'px-2 py-0.5 rounded bg-zinc-800 text-[11px] text-zinc-400 font-mono';
+          streamBadge.textContent = 'Auto-updating';
+        }
+      }
+
+      container.innerHTML = '';
+      feed.slice(0, 5).forEach((item, idx) => {
+        const row = document.createElement('div');
+        row.className = `feed-item-anim flex items-center justify-between gap-3 py-2 text-xs hover:bg-zinc-800/40 rounded-lg px-2 transition-colors ${idx === 0 ? 'bg-amber-500/5' : ''}`;
+        
+        const starsDisplay = '⭐'.repeat(item.stars || 5);
+        const timeAgo = formatTimeAgo(item.timestamp);
+        const itemInt = item.intensity || getIntensityFromScore(item.damageScore || 90);
+        const meta = getIntensityMeta(itemInt);
+
+        row.innerHTML = `
+          <div class="flex items-center gap-2.5 min-w-0">
+            <img 
+              src="${item.avatar_url || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(item.username)}`}" 
+              alt="${item.username}" 
+              class="w-6 h-6 rounded-md border border-zinc-700 object-cover shrink-0" 
+              referrerpolicy="no-referrer"
+              onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(item.username)}'"
+            />
+            <div class="min-w-0 flex items-center gap-2 flex-wrap">
+              <span class="font-bold text-zinc-200">@${item.username}</span>
+              <span class="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold border ${meta.badgeBg}">
+                ${meta.icon} ${meta.label}
+              </span>
+              <span class="text-zinc-500 hidden sm:inline">·</span>
+              <span class="text-zinc-300 truncate max-w-xs sm:max-w-md italic">"${item.snippet}"</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="text-red-400 font-bold shrink-0">${item.damageScore || 90}%</span>
+            <span class="text-amber-400 text-[11px] hidden sm:inline" title="Spaghetti Stars">${starsDisplay}</span>
+            <span class="text-[11px] text-zinc-500 tabular-nums stream-time-label" data-time="${item.timestamp || Date.now()}">${timeAgo}</span>
+            <button 
+              type="button" 
+              class="quick-stream-roast px-2 py-0.5 rounded bg-zinc-800 hover:bg-red-500/20 text-zinc-400 hover:text-red-300 border border-zinc-700/80 text-[10px] font-mono transition-colors cursor-pointer"
+              data-username="${item.username}"
+              title="Roast this developer now"
+            >
+              Roast
+            </button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      // Bind quick roast buttons in ticker
+      container.querySelectorAll('.quick-stream-roast').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const u = btn.getAttribute('data-username');
+          if (u) {
+            usernameInput.value = u;
+            sound.playClick();
+            triggerRoastFlow(u);
+          }
+        });
+      });
+    }
+
+    // Helper: Get random quote for user
+    function getRandomRoastQuote(username) {
+      const key = username.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const pool = LIVE_ROAST_PITHY_QUOTES[key] || LIVE_ROAST_PITHY_QUOTES[username.toLowerCase()] || GENERIC_ROAST_QUOTES;
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    // Record user-initiated roast into leaderboard
     function recordRoastInLeaderboard(user, roast) {
       try {
         const list = getLeaderboard();
@@ -2115,37 +3290,187 @@ Roasted at github-shame-engine.vercel.app`;
           list[existingIdx].avatar_url = user.avatar_url || list[existingIdx].avatar_url;
           list[existingIdx].archetype = roast.archetype || list[existingIdx].archetype;
           list[existingIdx].damageScore = roast.damageScore || list[existingIdx].damageScore;
+          list[existingIdx].trendScore = (list[existingIdx].trendScore || 15) + 30;
           list[existingIdx].lastRoastedAt = Date.now();
         } else {
-          list.push({
+          list.unshift({
             username: user.login,
             name: user.name || user.login,
             count: 1,
             avatar_url: user.avatar_url || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(user.login)}`,
-            archetype: roast.archetype,
-            damageScore: roast.damageScore,
+            archetype: roast.archetype || "Fresh Roast Victim",
+            damageScore: roast.damageScore || 90,
+            trendScore: 40,
             lastRoastedAt: Date.now()
           });
         }
 
-        // Sort by roast count descending
-        list.sort((a, b) => b.count - a.count);
+        saveLeaderboard(list);
 
-        localStorage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(list));
-        renderLeaderboard();
+        // Add to live activity feed
+        const stars = getSpaghettiRating(roast.damageScore).stars;
+        const feed = getLiveFeed();
+        const roastInt = roast.mode || document.getElementById('roast-mode')?.value || getIntensityFromScore(roast.damageScore);
+        feed.unshift({
+          id: `feed-${Date.now()}`,
+          username: user.login,
+          name: user.name || user.login,
+          avatar_url: user.avatar_url,
+          damageScore: roast.damageScore,
+          intensity: roastInt,
+          stars: stars,
+          snippet: roast.headline ? roast.headline.slice(0, 60) : getRandomRoastQuote(user.login),
+          timestamp: Date.now()
+        });
+        saveLiveFeed(feed);
+
+        // Update global stats
+        const stats = getGlobalStats();
+        stats.totalRoasts += 1;
+        stats.lastEventAt = Date.now();
+        saveGlobalStats(stats);
+
+        lastRoastedUsername = user.login;
+
+        if (broadcastChannel) {
+          try { broadcastChannel.postMessage({ type: 'ROAST_EVENT', username: user.login }); } catch (e) {}
+        }
+
+        renderLeaderboard(true);
+        renderLiveActivityStream();
       } catch (err) {
         console.warn("Failed updating leaderboard in localStorage", err);
       }
     }
 
-    function renderLeaderboard() {
+    // Fire a simulated or network live roast event
+    function fireLiveRoastEvent(explicitUsername = null) {
+      try {
+        const list = getLeaderboard();
+        if (list.length === 0) return;
+
+        let targetIndex = 0;
+        if (explicitUsername) {
+          targetIndex = list.findIndex(i => i.username.toLowerCase() === explicitUsername.toLowerCase());
+          if (targetIndex === -1) targetIndex = 0;
+        } else {
+          // Weighted random selection:
+          // 45% chance: Pick one of the top 4 contenders to create tight races
+          // 35% chance: Pick a rising challenger from ranks 5 to 12
+          // 20% chance: Pick a sleeper from lower ranks or random victim
+          const dice = Math.random();
+          if (dice < 0.45 && list.length >= 4) {
+            targetIndex = Math.floor(Math.random() * 4);
+          } else if (dice < 0.80 && list.length >= 8) {
+            targetIndex = 4 + Math.floor(Math.random() * Math.min(6, list.length - 4));
+          } else {
+            targetIndex = Math.floor(Math.random() * list.length);
+          }
+        }
+
+        const target = list[targetIndex];
+        target.count = (target.count || 10) + 1;
+        target.trendScore = (target.trendScore || 10) + Math.floor(Math.random() * 8) + 6;
+        target.lastRoastedAt = Date.now();
+
+        // Determine target intensity and damage profile
+        let targetIntensity = getIntensityFromScore(target.damageScore || 90);
+        if (currentLeaderboardTab === 'intensity') {
+          targetIntensity = selectedIntensity;
+          if (selectedIntensity === 'mild') {
+            target.damageScore = Math.floor(75 + Math.random() * 13); // 75-87%
+          } else if (selectedIntensity === 'nuclear') {
+            target.damageScore = Math.floor(95 + Math.random() * 6); // 95-100%
+          } else {
+            target.damageScore = Math.floor(88 + Math.random() * 7); // 88-94%
+          }
+        } else {
+          // Small damage score jitter (+/- 1%) to keep things lively
+          const scoreJitter = (Math.random() > 0.5 ? 1 : -1) * (Math.random() > 0.7 ? 1 : 0);
+          target.damageScore = Math.max(86, Math.min(100, (target.damageScore || 90) + scoreJitter));
+          targetIntensity = getIntensityFromScore(target.damageScore);
+        }
+
+        let quoteSnippet = getRandomRoastQuote(target.username);
+        if (INTENSITY_PITHY_QUOTES[targetIntensity]) {
+          const pool = INTENSITY_PITHY_QUOTES[targetIntensity];
+          if (Math.random() > 0.3) {
+            quoteSnippet = pool[Math.floor(Math.random() * pool.length)];
+          }
+        }
+
+        lastRoastedUsername = target.username;
+
+        saveLeaderboard(list);
+
+        // Add to Live Feed
+        const feed = getLiveFeed();
+        const stars = getSpaghettiRating(target.damageScore).stars;
+        feed.unshift({
+          id: `feed-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+          username: target.username,
+          name: target.name,
+          avatar_url: target.avatar_url,
+          damageScore: target.damageScore,
+          intensity: targetIntensity,
+          stars: stars,
+          snippet: quoteSnippet,
+          timestamp: Date.now()
+        });
+        saveLiveFeed(feed);
+
+        // Update Global Stats
+        const stats = getGlobalStats();
+        stats.totalRoasts += 1;
+        stats.burnRate = Math.floor(18 + Math.random() * 8);
+        stats.lastEventAt = Date.now();
+        saveGlobalStats(stats);
+
+        if (broadcastChannel) {
+          try { broadcastChannel.postMessage({ type: 'ROAST_EVENT', username: target.username }); } catch (e) {}
+        }
+
+        renderLeaderboard(true);
+        renderLiveActivityStream();
+      } catch (err) {
+        console.warn("Failed firing live roast event", err);
+      }
+    }
+
+    // Render the dynamic leaderboard
+    function renderLeaderboard(triggerAudioTick = false) {
       const container = document.getElementById('leaderboard-container');
       if (!container) return;
 
-      const list = getLeaderboard().slice(0, 5);
+      const rawList = getLeaderboard();
+      const now = Date.now();
+
+      // Sort based on active tab
+      const sorted = [...rawList].sort((a, b) => {
+        if (currentLeaderboardTab === 'trending') {
+          const aRecencyBoost = (now - (a.lastRoastedAt || 0) < 90000) ? 40 : 0;
+          const bRecencyBoost = (now - (b.lastRoastedAt || 0) < 90000) ? 40 : 0;
+          const aScore = (a.trendScore || 0) + aRecencyBoost + (a.count || 0) * 0.2;
+          const bScore = (b.trendScore || 0) + bRecencyBoost + (b.count || 0) * 0.2;
+          return bScore - aScore;
+        } else if (currentLeaderboardTab === 'damage') {
+          return (b.damageScore || 0) - (a.damageScore || 0);
+        } else if (currentLeaderboardTab === 'recent') {
+          return (b.lastRoastedAt || 0) - (a.lastRoastedAt || 0);
+        } else if (currentLeaderboardTab === 'intensity') {
+          const aMatch = (getIntensityFromScore(a.damageScore || 90) === selectedIntensity) ? 1 : 0;
+          const bMatch = (getIntensityFromScore(b.damageScore || 90) === selectedIntensity) ? 1 : 0;
+          if (aMatch !== bMatch) return bMatch - aMatch;
+          return (b.damageScore || 0) - (a.damageScore || 0);
+        }
+        // default: 'top' all-time most roasted
+        return (b.count || 0) - (a.count || 0);
+      });
+
+      const displayList = sorted.slice(0, leaderboardDisplayLimit);
       container.innerHTML = '';
 
-      const rankBadges = [
+      const rankBadgeStyles = [
         { label: '#1', border: 'border-amber-500/50', glow: 'shadow-amber-500/10 shadow-lg', badgeBg: 'bg-amber-500/10 text-amber-400 border border-amber-500/30' },
         { label: '#2', border: 'border-red-500/40', glow: '', badgeBg: 'bg-red-500/10 text-red-400 border border-red-500/30' },
         { label: '#3', border: 'border-purple-500/40', glow: '', badgeBg: 'bg-purple-500/10 text-purple-400 border border-purple-500/30' },
@@ -2153,23 +3478,52 @@ Roasted at github-shame-engine.vercel.app`;
         { label: '#5', border: 'border-zinc-800', glow: '', badgeBg: 'bg-zinc-800 text-zinc-400 border border-zinc-700' }
       ];
 
-      list.forEach((item, index) => {
-        const meta = rankBadges[index] || rankBadges[4];
+      displayList.forEach((item, index) => {
+        const currentRank = index + 1;
+        const prevRank = previousRanks.get(item.username);
+        let rankDeltaBadge = '';
+
+        if (prevRank !== undefined) {
+          if (prevRank > currentRank) {
+            const diff = prevRank - currentRank;
+            rankDeltaBadge = `<span class="rank-change-anim inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/40 text-emerald-400" title="Climbed ${diff} rank(s) live">▲ +${diff}</span>`;
+          } else if (prevRank < currentRank) {
+            const diff = currentRank - prevRank;
+            rankDeltaBadge = `<span class="rank-change-anim inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-500/15 border border-rose-500/40 text-rose-400" title="Dropped ${diff} rank(s)">▼ -${diff}</span>`;
+          } else if (currentRank === 1) {
+            rankDeltaBadge = `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 border border-amber-500/40 text-amber-400">👑 KING</span>`;
+          }
+        } else if (currentRank <= 3) {
+          rankDeltaBadge = `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-orange-500/15 border border-orange-500/40 text-orange-400">🔥 HOT</span>`;
+        }
+
+        const isJustRoasted = (lastRoastedUsername && lastRoastedUsername.toLowerCase() === item.username.toLowerCase());
+        const meta = rankBadgeStyles[index] || { label: `#${currentRank}`, border: 'border-zinc-800/80', glow: '', badgeBg: 'bg-zinc-800 text-zinc-400 border border-zinc-700' };
+        const timeAgoText = formatTimeAgo(item.lastRoastedAt);
+        const spaghetti = getSpaghettiRating(item.damageScore || 90);
+        const itemInt = getIntensityFromScore(item.damageScore || 90);
+        const metaInt = getIntensityMeta(itemInt);
+        const intensityBadge = `<span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold border ${metaInt.badgeBg}">${metaInt.icon} ${metaInt.label}</span>`;
+
         const card = document.createElement('div');
-        card.className = `p-4 rounded-xl bg-zinc-900/80 backdrop-blur-md border ${meta.border} ${meta.glow} flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-zinc-700 group`;
-        
+        card.className = `p-4 rounded-xl bg-zinc-900/80 backdrop-blur-md border ${meta.border} ${meta.glow} flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all duration-300 hover:border-zinc-700 group ${isJustRoasted ? 'leader-card-updated' : ''}`;
+        card.setAttribute('data-username', item.username);
+
         card.innerHTML = `
           <div class="flex items-center gap-3.5 min-w-0">
-            <!-- Rank Tag -->
-            <div class="w-9 h-9 rounded-lg ${meta.badgeBg} flex items-center justify-center font-mono font-black text-sm shrink-0">
-              ${meta.label}
+            <!-- Rank Tag & Rank Movement Indicator -->
+            <div class="flex flex-col items-center gap-1 shrink-0">
+              <div class="w-9 h-9 rounded-lg ${meta.badgeBg} flex items-center justify-center font-mono font-black text-sm shrink-0">
+                #${currentRank}
+              </div>
+              ${rankDeltaBadge}
             </div>
 
             <!-- Avatar -->
             <img 
               src="${item.avatar_url || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(item.username)}`}" 
               alt="${item.username}" 
-              class="w-11 h-11 rounded-lg border border-zinc-700 object-cover bg-zinc-800 shrink-0" 
+              class="w-12 h-12 rounded-lg border border-zinc-700 object-cover bg-zinc-800 shrink-0" 
               referrerpolicy="no-referrer"
               onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(item.username)}'"
             />
@@ -2179,13 +3533,20 @@ Roasted at github-shame-engine.vercel.app`;
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="font-bold text-white text-sm sm:text-base truncate group-hover:text-amber-300 transition-colors">${item.name || item.username}</span>
                 <span class="text-xs font-mono text-zinc-500 truncate">@${item.username}</span>
+                ${isJustRoasted ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/20 text-red-300 border border-red-500/40 animate-pulse">JUST SHAMED</span>' : ''}
               </div>
               <div class="flex items-center gap-2 mt-0.5 text-xs text-zinc-400 flex-wrap">
                 <span class="text-zinc-300 font-mono text-[11px] truncate">${item.archetype || 'Spaghetti Maestro'}</span>
                 <span>·</span>
+                ${intensityBadge}
+                <span>·</span>
                 <span class="text-red-400 font-mono text-[11px] shrink-0 font-bold">${item.damageScore || 90}% Annihilated</span>
                 <span>·</span>
-                <span class="text-amber-400 font-mono text-[11px] shrink-0" title="Spaghetti Rating">🍝 ${'⭐'.repeat(getSpaghettiRating(item.damageScore || 90).stars)}</span>
+                <span class="text-amber-400 font-mono text-[11px] shrink-0" title="Spaghetti Rating: ${spaghetti.title}">🍝 ${'⭐'.repeat(spaghetti.stars)}</span>
+              </div>
+              <div class="text-[11px] font-mono text-zinc-500 mt-1 flex items-center gap-1.5">
+                <span class="inline-block w-1.5 h-1.5 rounded-full ${isJustRoasted ? 'bg-red-400 animate-ping' : 'bg-zinc-600'}"></span>
+                <span>Last shamed: <span class="relative-time-text text-zinc-400 tabular-nums" data-time="${item.lastRoastedAt || Date.now()}">${timeAgoText}</span></span>
               </div>
             </div>
           </div>
@@ -2193,14 +3554,14 @@ Roasted at github-shame-engine.vercel.app`;
           <!-- Stats & Quick Roast Action -->
           <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-800/80">
             <div class="text-left sm:text-right font-mono">
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-zinc-950 border border-zinc-800 text-xs font-bold text-amber-400 tabular-nums">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-zinc-950 border border-zinc-800 text-xs font-bold text-amber-400 tabular-nums shadow-inner">
                 🔥 ${item.count} ${item.count === 1 ? 'Roast' : 'Roasts'}
               </span>
             </div>
 
             <button 
               type="button" 
-              class="leaderboard-roast-btn px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/60 text-xs font-mono text-red-300 flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+              class="leaderboard-roast-btn px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/60 text-xs font-mono text-red-300 flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shadow-sm hover:shadow-red-500/20"
               data-username="${item.username}"
             >
               <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
@@ -2211,6 +3572,24 @@ Roasted at github-shame-engine.vercel.app`;
 
         container.appendChild(card);
       });
+
+      // Update previous ranks map for subsequent rank movement comparison
+      previousRanks.clear();
+      sorted.forEach((item, idx) => {
+        previousRanks.set(item.username, idx + 1);
+      });
+
+      // Update Global Telemetry Stats Header
+      const stats = getGlobalStats();
+      const statTotalRoasts = document.getElementById('stat-total-roasts');
+      const statTopVictim = document.getElementById('stat-top-victim');
+      const statBurnRate = document.getElementById('stat-burn-rate');
+      const statLastRoast = document.getElementById('stat-last-roast');
+
+      if (statTotalRoasts) statTotalRoasts.textContent = stats.totalRoasts.toLocaleString();
+      if (statTopVictim && sorted[0]) statTopVictim.textContent = `@${sorted[0].username}`;
+      if (statBurnRate) statBurnRate.textContent = `~${stats.burnRate || 19} / min`;
+      if (statLastRoast) statLastRoast.textContent = formatTimeAgo(stats.lastEventAt || Date.now());
 
       // Bind Roast Again buttons
       container.querySelectorAll('.leaderboard-roast-btn').forEach(btn => {
@@ -2225,6 +3604,201 @@ Roasted at github-shame-engine.vercel.app`;
       });
 
       lucide.createIcons();
+    }
+
+    // Real-Time Engine Interval Loop
+    function startRealtimeLeaderboardEngine() {
+      if (realTimeTickInterval) clearInterval(realTimeTickInterval);
+
+      realTimeTickInterval = setInterval(() => {
+        const countdownEl = document.getElementById('next-tick-countdown');
+
+        // Update relative time labels in DOM dynamically every second
+        document.querySelectorAll('.relative-time-text').forEach(el => {
+          const time = Number(el.getAttribute('data-time'));
+          if (time) el.textContent = formatTimeAgo(time);
+        });
+        document.querySelectorAll('.stream-time-label').forEach(el => {
+          const time = Number(el.getAttribute('data-time'));
+          if (time) el.textContent = formatTimeAgo(time);
+        });
+
+        const statLastRoast = document.getElementById('stat-last-roast');
+        const stats = getGlobalStats();
+        if (statLastRoast) statLastRoast.textContent = formatTimeAgo(stats.lastEventAt || Date.now());
+
+        if (!isLiveSyncActive) {
+          if (countdownEl) countdownEl.textContent = 'PAUSED';
+          return;
+        }
+
+        nextRoastCountdown -= 1;
+        if (countdownEl) countdownEl.textContent = `${Math.max(1, nextRoastCountdown)}s`;
+
+        if (nextRoastCountdown <= 0) {
+          // Reset countdown timer (4 to 8 seconds)
+          nextRoastCountdown = Math.floor(Math.random() * 5) + 4;
+          if (countdownEl) countdownEl.textContent = `${nextRoastCountdown}s`;
+          fireLiveRoastEvent();
+        }
+      }, 1000);
+    }
+
+    // Set up interactive controls for Hall of Flame
+    function initLeaderboardControls() {
+      // 1. Trigger Live Roast Button (Immediate Manual Roast Event)
+      const triggerLiveBtn = document.getElementById('trigger-live-roast-btn');
+      if (triggerLiveBtn) {
+        triggerLiveBtn.addEventListener('click', () => {
+          sound.playBurnSizzle();
+          fireLiveRoastEvent();
+          nextRoastCountdown = Math.floor(Math.random() * 4) + 5;
+          showToast('⚡ Live incoming roast broadcasted across the Hall of Flame!');
+        });
+      }
+
+      // 2. Pause / Resume Live Sync Button
+      const toggleLiveBtn = document.getElementById('toggle-live-sync-btn');
+      const toggleLabel = document.getElementById('live-toggle-label');
+      const toggleIcon = document.getElementById('live-toggle-icon');
+      const statusPillText = document.getElementById('live-status-pill-text');
+
+      if (toggleLiveBtn) {
+        toggleLiveBtn.addEventListener('click', () => {
+          isLiveSyncActive = !isLiveSyncActive;
+          sound.playClick();
+
+          if (isLiveSyncActive) {
+            if (toggleLabel) toggleLabel.textContent = 'Pause Live';
+            if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'pause');
+            if (statusPillText) statusPillText.textContent = 'LIVE REAL-TIME SYNC';
+            showToast('▶️ Live Hall of Flame sync resumed.');
+          } else {
+            if (toggleLabel) toggleLabel.textContent = 'Resume Live';
+            if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'play');
+            if (statusPillText) statusPillText.textContent = 'LIVE SYNC PAUSED';
+            showToast('⏸️ Live Hall of Flame sync paused.');
+          }
+          lucide.createIcons();
+        });
+      }
+
+      // Helper: sync intensity toggle button states and tab label
+      function updateIntensitySelection(intensity) {
+        selectedIntensity = intensity;
+        const meta = getIntensityMeta(intensity);
+        const tabVal = document.getElementById('tab-intensity-val');
+        const tabIcon = document.getElementById('tab-intensity-icon');
+        if (tabVal) tabVal.textContent = meta.label;
+        if (tabIcon) tabIcon.textContent = meta.icon;
+
+        document.querySelectorAll('.intensity-btn').forEach(b => {
+          const bInt = b.getAttribute('data-intensity');
+          if (bInt === intensity) {
+            b.className = `intensity-btn px-2.5 py-1 rounded ${meta.activeBtnClass} transition-all cursor-pointer flex items-center gap-1`;
+          } else {
+            b.className = `intensity-btn px-2.5 py-1 rounded text-zinc-400 hover:text-zinc-200 transition-all cursor-pointer flex items-center gap-1`;
+          }
+        });
+      }
+
+      // 3. Filter Tabs (Top, Trending, Damage, Recent, Intensity)
+      const tabButtons = document.querySelectorAll('#leaderboard-tabs .leader-tab');
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tab = btn.getAttribute('data-tab');
+          if (!tab) return;
+          sound.playClick();
+
+          if (tab === 'intensity') {
+            if (currentLeaderboardTab === 'intensity') {
+              // Cycle to next intensity: mild -> spicy -> nuclear -> mild
+              const nextMap = { mild: 'spicy', spicy: 'nuclear', nuclear: 'mild' };
+              const nextInt = nextMap[selectedIntensity] || 'spicy';
+              updateIntensitySelection(nextInt);
+              showToast(`${getIntensityMeta(nextInt).icon} Live feed & rankings switched to ${getIntensityMeta(nextInt).label} intensity.`);
+            } else {
+              currentLeaderboardTab = 'intensity';
+              tabButtons.forEach(b => {
+                b.classList.remove('bg-zinc-800', 'text-white', 'font-bold');
+                b.classList.add('text-zinc-400');
+              });
+              btn.classList.add('bg-zinc-800', 'text-white', 'font-bold');
+              btn.classList.remove('text-zinc-400');
+              updateIntensitySelection(selectedIntensity);
+              showToast(`${getIntensityMeta(selectedIntensity).icon} Filtering live feed by ${getIntensityMeta(selectedIntensity).label} Intensity.`);
+            }
+          } else {
+            currentLeaderboardTab = tab;
+            tabButtons.forEach(b => {
+              b.classList.remove('bg-zinc-800', 'text-white', 'font-bold');
+              b.classList.add('text-zinc-400');
+            });
+            btn.classList.add('bg-zinc-800', 'text-white', 'font-bold');
+            btn.classList.remove('text-zinc-400');
+          }
+
+          renderLeaderboard();
+          renderLiveActivityStream();
+        });
+      });
+
+      // Quick Intensity Toggle Buttons (Mild, Spicy, Nuclear)
+      document.querySelectorAll('.intensity-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const targetInt = btn.getAttribute('data-intensity');
+          if (!targetInt) return;
+          sound.playClick();
+          updateIntensitySelection(targetInt);
+
+          currentLeaderboardTab = 'intensity';
+          tabButtons.forEach(b => {
+            b.classList.remove('bg-zinc-800', 'text-white', 'font-bold');
+            b.classList.add('text-zinc-400');
+          });
+          const tabIntensity = document.getElementById('tab-intensity');
+          if (tabIntensity) {
+            tabIntensity.classList.add('bg-zinc-800', 'text-white', 'font-bold');
+            tabIntensity.classList.remove('text-zinc-400');
+          }
+
+          showToast(`${getIntensityMeta(targetInt).icon} Live feed filtered to ${getIntensityMeta(targetInt).label} roasts.`);
+          renderLeaderboard();
+          renderLiveActivityStream();
+        });
+      });
+
+      // 4. Toggle Limit (Top 5 / Top 10)
+      const limitBtn = document.getElementById('toggle-leaderboard-limit');
+      if (limitBtn) {
+        limitBtn.addEventListener('click', () => {
+          sound.playClick();
+          if (leaderboardDisplayLimit === 5) {
+            leaderboardDisplayLimit = 10;
+            limitBtn.textContent = 'Top 10 (Show 5)';
+          } else {
+            leaderboardDisplayLimit = 5;
+            limitBtn.textContent = 'Top 5 (Show 10)';
+          }
+          renderLeaderboard();
+        });
+      }
+
+      // 5. Cross-tab sync listener
+      window.addEventListener('storage', (e) => {
+        if (e.key === LEADERBOARD_STORAGE_KEY || e.key === LIVE_FEED_STORAGE_KEY) {
+          renderLeaderboard(false);
+          renderLiveActivityStream();
+        }
+      });
+
+      if (broadcastChannel) {
+        broadcastChannel.onmessage = (e) => {
+          renderLeaderboard(false);
+          renderLiveActivityStream();
+        };
+      }
     }
 
     // ==========================================
@@ -2395,18 +3969,27 @@ Roasted at github-shame-engine.vercel.app`;
     if (resetLeaderboardBtn) {
       resetLeaderboardBtn.addEventListener('click', () => {
         sound.playClick();
-        localStorage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(INITIAL_LEADERBOARD));
+        localStorage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(DEFAULT_ROSTER));
+        localStorage.removeItem(LIVE_FEED_STORAGE_KEY);
+        const stats = { totalRoasts: 15482, burnRate: 19, lastEventAt: Date.now() };
+        localStorage.setItem(GLOBAL_STATS_STORAGE_KEY, JSON.stringify(stats));
+        previousRanks.clear();
+        lastRoastedUsername = null;
         renderLeaderboard();
-        showToast('Hall of Flame reset to factory victims.');
+        renderLiveActivityStream();
+        showToast('Hall of Flame baseline roster restored.');
       });
     }
 
     // Initial Lucide Render & App Initialization
     document.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
       renderLeaderboard();
+      renderLiveActivityStream();
+      initLeaderboardControls();
+      startRealtimeLeaderboardEngine();
       initAmbientBackground();
       initCardTilt();
+      lucide.createIcons();
     });
   </script>
 </body>
